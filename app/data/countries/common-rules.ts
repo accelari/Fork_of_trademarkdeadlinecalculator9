@@ -111,6 +111,7 @@ export const registrationBasedCountries = [
   "MM",
   "NP",
   "PK",
+  "PH",
   "SG",
   "TW",
   "UZ",
@@ -190,6 +191,7 @@ export const tenYearTermCountries = [
   "CN",
   "KR",
   "CA",
+  "US",
   "MX",
   "AU",
   "NZ",
@@ -202,6 +204,7 @@ export const tenYearTermCountries = [
   "IR",
   "IL",
   "JO",
+  "LB",
   "SY",
   "SA",
   "AE",
@@ -214,12 +217,16 @@ export const tenYearTermCountries = [
   "BN",
   "GE",
   "KG",
+  "KP",
   "LA",
+  "MO",
   "MV",
   "MN",
   "MM",
   "PK",
+  "PH",
   "SG",
+  "TW",
   "UZ",
   "BH",
   "QA",
@@ -249,6 +256,7 @@ export const tenYearTermCountries = [
   "TN",
   "UG",
   "EH",
+  "ZM",
   "ZW",
 ]
 
@@ -391,10 +399,10 @@ export const usageProofRequiredCountries = [
 ]
 
 // Kategorisierung nach Benutzungserklärung
-export const usageDeclarationRequiredCountries = ["US", "MX", "PH", "AR", "HT", "CV"]
+export const usageDeclarationRequiredCountriesList = ["US", "MX", "PH", "AR", "HT", "CV"]
 
 // Kategorisierung nach Prüfungsumfang
-export const comprehensiveExaminationCountries = [
+export const comprehensiveExaminationCountriesList = [
   "DE",
   "GB",
   "IE",
@@ -452,6 +460,7 @@ export const comprehensiveExaminationCountries = [
   "UY",
   "BW",
   "CD",
+  "GQ",
   "GM",
   "GH",
   "GN",
@@ -468,7 +477,7 @@ export const comprehensiveExaminationCountries = [
   "ZW",
 ]
 
-export const limitedExaminationCountries = [
+export const limitedExaminationCountriesList = [
   "EM",
   "FR",
   "IT",
@@ -620,6 +629,7 @@ export const oppositionPossibleCountries = [
   "TG",
   "TN",
   "UG",
+  "EH",
   "ZM",
   "ZW",
 ]
@@ -780,6 +790,7 @@ export const standardRenewalCountries = [
   "AE",
   "TH",
   "VN",
+  "MY",
   "ZA",
   "AZ",
   "BD",
@@ -886,7 +897,6 @@ export const standardRenewalPeriodCountries = [
   "CL",
   "CO",
   "PE",
-  "VE",
   "IQ",
   "IR",
   "IL",
@@ -960,6 +970,7 @@ export const sixMonthRenewalStartCountries = [
   "AE",
   "TH",
   "VN",
+  "MY",
   "ZA",
 ]
 
@@ -1028,92 +1039,64 @@ export const sixMonthLateRenewalCountries = [
   "VN",
   "MY",
   "ZA",
+  "AZ",
+  "BD",
+  "BT",
+  "BN",
+  "GE",
+  "KG",
+  "KP",
+  "LA",
+  "MO",
+  "MV",
+  "MN",
+  "MM",
+  "PK",
+  "PH",
+  "SG",
+  "TW",
+  "UZ",
+  "BH",
+  "QA",
+  "BO",
+  "EC",
+  "FK",
+  "GF",
+  "GY",
+  "PY",
+  "SR",
+  "UY",
+  "BW",
+  "CD",
+  "GQ",
+  "GM",
+  "GH",
+  "GN",
+  "NA",
+  "NE",
+  "RW",
+  "ST",
+  "SN",
+  "SC",
+  "SL",
+  "SO",
+  "SS",
+  "SD",
+  "TZ",
+  "TG",
+  "TN",
+  "UG",
+  "EH",
+  "ZM",
+  "ZW",
 ]
 
 export const threeMonthLateRenewalCountries = ["BM", "NP", "SL", "ZM", "KI", "NU"]
 
 // Kategorisierung nach Benutzungsnachweis-Typ
-export const regularUsageProofCountries = ["US", "MX", "PH", "AR"]
-export const onChallengeUsageProofCountries = ["EM", "JP", "CN", "KR", "CA", "AU", "NZ", "BR", "CL", "CO", "PE", "VE"]
-export const noUsageProofCountries = [
-  "DE",
-  "FR",
-  "GB",
-  "IT",
-  "ES",
-  "CH",
-  "BE",
-  "LU",
-  "IE",
-  "PT",
-  "PL",
-  "SE",
-  "FI",
-  "DK",
-  "GR",
-  "HR",
-  "EE",
-  "LV",
-  "LT",
-  "CZ",
-  "SK",
-  "SI",
-  "BG",
-  "RO",
-  "CY",
-  "MT",
-  "IS",
-  "LI",
-  "MC",
-  "AL",
-  "BA",
-  "MK",
-  "ME",
-  "RS",
-]
-
-// Kategorisierung nach Benutzungsnachweis-Frist
-export const threeYearUsageProofCountries = ["MX", "PH"]
-export const fiveYearUsageProofCountries = ["US", "EM", "AR"]
-
-// Kategorisierung nach Benutzungserklärung-Typ
-export const regularUsageDeclarationCountries = ["US", "MX", "PH", "AR"]
-export const noUsageDeclarationCountries = [
-  "DE",
+export const regularUsageProofCountriesList = ["US", "MX", "PH", "AR"]
+export const onChallengeUsageProofCountriesList = [
   "EM",
-  "FR",
-  "GB",
-  "IT",
-  "ES",
-  "CH",
-  "BE",
-  "LU",
-  "IE",
-  "PT",
-  "PL",
-  "SE",
-  "FI",
-  "DK",
-  "GR",
-  "HR",
-  "EE",
-  "LV",
-  "LT",
-  "CZ",
-  "SK",
-  "SI",
-  "BG",
-  "RO",
-  "CY",
-  "MT",
-  "IS",
-  "LI",
-  "MC",
-  "AL",
-  "BA",
-  "MK",
-  "ME",
-  "RS",
   "JP",
   "CN",
   "KR",
@@ -1126,157 +1109,158 @@ export const noUsageDeclarationCountries = [
   "PE",
   "VE",
 ]
+export const noUsageProofCountriesList = [
+  "DE",
+  "FR",
+  "GB",
+  "IT",
+  "ES",
+  "CH",
+  "BE",
+  "LU",
+  "IE",
+  "PT",
+  "PL",
+  "SE",
+  "FI",
+  "DK",
+  "GR",
+  "HR",
+  "EE",
+  "LV",
+  "LT",
+  "CZ",
+  "SK",
+  "SI",
+  "BG",
+  "RO",
+  "CY",
+  "MT",
+  "IS",
+  "LI",
+  "MC",
+  "AL",
+  "BA",
+  "MK",
+  "ME",
+  "RS",
+]
 
-// Kategorisierung nach Benutzungserklärung-Frist
-export const threeYearUsageDeclarationCountries = ["MX", "PH", "AR"]
-export const fiveYearUsageDeclarationCountries = ["US"]
+// Hilfsfunktion zur Bestimmung der detaillierten Benutzungsnachweis-Informationen
+export const threeYearUsageProofCountries = ["MX"]
+export const fiveYearUsageProofCountries = ["US", "PH", "AR"]
 
-// Hilfsfunktion zur Überprüfung der Zugehörigkeit zu einer Kategorie
-export function isInCategory(countryCode: string, category: string[]): boolean {
-  return category.includes(countryCode)
-}
+// Hilfsfunktion zur Bestimmung der detaillierten Benutzungserklärung-Informationen
+export const threeYearUsageDeclarationCountries = ["MX"]
+export const fiveYearUsageDeclarationCountries = ["US", "PH", "AR"]
 
-// Hilfsfunktion zur Bestimmung der Berechnungsbasis
-export function getCalculationBasis(countryCode: string): "application" | "registration" | "none" {
-  if (isInCategory(countryCode, applicationBasedCountries)) return "application"
-  if (isInCategory(countryCode, registrationBasedCountries)) return "registration"
-  return "none" // Fallback für Länder ohne spezifische Berechnungsbasis
-}
-
-// Hilfsfunktion zur Bestimmung der Markenlaufzeit
-export function getProtectionPeriod(countryCode: string): number {
-  if (isInCategory(countryCode, tenYearTermCountries)) return 10
-  if (isInCategory(countryCode, sevenYearTermCountries)) return 7
-  if (isInCategory(countryCode, fifteenYearTermCountries)) return 15
-  return 10 // Standardwert, falls keine spezifische Laufzeit definiert ist
-}
-
-// Hilfsfunktion zur Bestimmung des Vollmachtserfordernisses
-export function getRepresentativeRequired(countryCode: string): "Ja" | "Nein" {
-  if (isInCategory(countryCode, representativeRequiredCountries)) return "Ja"
-  if (isInCategory(countryCode, representativeNotRequiredCountries)) return "Nein"
-  return "Ja" // Standardwert, falls nicht spezifisch definiert
-}
-
-// Hilfsfunktion zur Bestimmung des Benutzungsnachweises
+// Hilfsfunktion zur Bestimmung der Benutzungsnachweis-Informationen
 export function getUsageProofRequired(countryCode: string): boolean {
   return isInCategory(countryCode, usageProofRequiredCountries)
 }
 
-// Hilfsfunktion zur Bestimmung der Benutzungserklärung
+// Hilfsfunktion zur Bestimmung der Benutzungserklärung-Informationen
 export function getUsageDeclarationRequired(countryCode: string): boolean {
-  return isInCategory(countryCode, usageDeclarationRequiredCountries)
+  return isInCategory(countryCode, usageDeclarationRequiredCountriesList)
 }
 
-// Hilfsfunktion zur Bestimmung des Prüfungsumfangs
-export function getPrufungsumfang(countryCode: string): "Umfassend" | "Beschränkt" | "Formal" {
-  if (isInCategory(countryCode, comprehensiveExaminationCountries)) return "Umfassend"
-  if (isInCategory(countryCode, limitedExaminationCountries)) return "Beschränkt"
-  return "Formal" // Standardwert, falls nicht spezifisch definiert
+function isInCategory(countryCode: string, category: string[]): boolean {
+  return category.includes(countryCode)
 }
 
-// Hilfsfunktion zur Bestimmung der Widerspruchsmöglichkeit
-export function getWiderspruch(countryCode: string): "Ja" | "Nein" {
-  if (isInCategory(countryCode, oppositionPossibleCountries)) return "Ja"
-  if (isInCategory(countryCode, oppositionNotPossibleCountries)) return "Nein"
-  return "Ja" // Standardwert, falls nicht spezifisch definiert
+// Hilfsfunktionen zur Kategorisierung
+export function getCalculationBasis(countryCode: string): "application" | "registration" {
+  return applicationBasedCountries.includes(countryCode) ? "application" : "registration"
 }
 
-// Hilfsfunktion zur Bestimmung der Vollmachtsanforderungen
-export function getPoaRequirements(countryCode: string): {
-  notarization: "Ja" | "Nein"
-  apostille: "Ja" | "Nein"
-} {
-  return {
-    notarization: isInCategory(countryCode, poaNotarizationRequiredCountries) ? "Ja" : "Nein",
-    apostille: isInCategory(countryCode, poaApostilleRequiredCountries) ? "Ja" : "Nein",
+export function getProtectionPeriod(countryCode: string): number {
+  if (tenYearTermCountries.includes(countryCode)) {
+    return 10
+  } else if (sevenYearTermCountries.includes(countryCode)) {
+    return 7
+  } else if (fifteenYearTermCountries.includes(countryCode)) {
+    return 15
   }
+  return 10 // Default
 }
 
-// Hilfsfunktion zur Bestimmung der Verlängerungsfristen
+export function getRepresentativeRequired(countryCode: string): string {
+  if (representativeRequiredCountries.includes(countryCode)) {
+    return "Ja"
+  } else if (representativeNotRequiredCountries.includes(countryCode)) {
+    return "Nein"
+  }
+  return "Ja" // Default
+}
+
+export function getPrufungsumfang(countryCode: string): string {
+  if (comprehensiveExaminationCountriesList.includes(countryCode)) {
+    return "Umfassend"
+  } else if (limitedExaminationCountriesList.includes(countryCode)) {
+    return "Beschränkt"
+  }
+  return "Umfassend" // Default
+}
+
+export function getWiderspruch(countryCode: string): string {
+  if (oppositionPossibleCountries.includes(countryCode)) {
+    return "Ja"
+  } else if (oppositionNotPossibleCountries.includes(countryCode)) {
+    return "Nein"
+  }
+  return "Ja" // Default
+}
+
+export function getPoaRequirements(countryCode: string): { notarization: string; apostille: string } {
+  const notarization = poaNotarizationRequiredCountries.includes(countryCode) ? "Ja" : "Nein"
+  const apostille = poaApostilleRequiredCountries.includes(countryCode) ? "Ja" : "Nein"
+  return { notarization, apostille }
+}
+
 export function getRenewalPeriods(countryCode: string): {
   renewalStartMonths: number
   renewalDeadlineMonths: number
   lateRenewalMonths: number
 } {
-  // Bestimme den Verlängerungsstart
-  let renewalStartMonths = 6
-  if (isInCategory(countryCode, twelveMonthRenewalStartCountries)) {
-    renewalStartMonths = 12
-  }
-
-  // Standardwert für Verlängerungsfrist
+  const renewalStartMonths = sixMonthRenewalStartCountries.includes(countryCode) ? 6 : 12
   const renewalDeadlineMonths = 0
+  const lateRenewalMonths = sixMonthLateRenewalCountries.includes(countryCode) ? 6 : 3
 
-  // Bestimme die Nachfrist
-  let lateRenewalMonths = 6
-  if (isInCategory(countryCode, threeMonthLateRenewalCountries)) {
-    lateRenewalMonths = 3
-  }
-
-  return {
-    renewalStartMonths,
-    renewalDeadlineMonths,
-    lateRenewalMonths,
-  }
+  return { renewalStartMonths, renewalDeadlineMonths, lateRenewalMonths }
 }
 
-// Hilfsfunktion zur Bestimmung der detaillierten Benutzungsnachweis-Informationen
 export function getUsageProofDetails(countryCode: string): {
   required: boolean
-  type: "Ja" | "Nein" | "Nur bei Anfechtung" | "Nach Landesrecht" | "Nach behördlicher Anforderung"
-  deadlineYears: number | "Keine regelmäßige Frist" | "Nach behördlicher Anforderung"
-} {
-  const required = getUsageProofRequired(countryCode)
-
-  // Bestimme den Typ des Benutzungsnachweises
-  let type: "Ja" | "Nein" | "Nur bei Anfechtung" | "Nach Landesrecht" | "Nach behördlicher Anforderung" = "Nein"
-  if (isInCategory(countryCode, regularUsageProofCountries)) {
-    type = "Ja"
-  } else if (isInCategory(countryCode, onChallengeUsageProofCountries)) {
-    type = "Nur bei Anfechtung"
-  }
-
-  // Bestimme die Frist für den Benutzungsnachweis
-  let deadlineYears: number | "Keine regelmäßige Frist" | "Nach behördlicher Anforderung" = "Keine regelmäßige Frist"
-  if (isInCategory(countryCode, threeYearUsageProofCountries)) {
-    deadlineYears = 3
-  } else if (isInCategory(countryCode, fiveYearUsageProofCountries)) {
-    deadlineYears = 5
-  }
-
-  return {
-    required,
-    type,
-    deadlineYears,
-  }
-}
-
-// Hilfsfunktion zur Bestimmung der detaillierten Benutzungserklärung-Informationen
-export function getUsageDeclarationDetails(countryCode: string): {
-  required: boolean
-  type: "Ja" | "Nein" | "Nach Landesrecht"
+  type: string
   deadlineYears: number | null
 } {
-  const required = getUsageDeclarationRequired(countryCode)
-
-  // Bestimme den Typ der Benutzungserklärung
-  let type: "Ja" | "Nein" | "Nach Landesrecht" = "Nein"
-  if (isInCategory(countryCode, regularUsageDeclarationCountries)) {
-    type = "Ja"
-  }
-
-  // Bestimme die Frist für die Benutzungserklärung
+  const required = usageProofRequiredCountries.includes(countryCode)
+  const type = "Nachweis nur auf Antrag Dritter erforderlich"
   let deadlineYears: number | null = null
-  if (isInCategory(countryCode, threeYearUsageDeclarationCountries)) {
+
+  if (threeYearUsageProofCountries.includes(countryCode)) {
     deadlineYears = 3
-  } else if (isInCategory(countryCode, fiveYearUsageDeclarationCountries)) {
+  } else if (fiveYearUsageProofCountries.includes(countryCode)) {
     deadlineYears = 5
   }
 
-  return {
-    required,
-    type,
-    deadlineYears,
+  return { required, type, deadlineYears }
+}
+
+export function getUsageDeclarationDetails(countryCode: string): {
+  required: boolean
+  type: string
+  deadlineYears: number | null
+} {
+  const required = usageDeclarationRequiredCountriesList.includes(countryCode)
+  const type = "Keine regelmäßige Benutzungserklärung erforderlich"
+  let deadlineYears: number | null = null
+
+  if (threeYearUsageDeclarationCountries.includes(countryCode)) {
+    deadlineYears = 3
+  } else if (fiveYearUsageDeclarationCountries.includes(countryCode)) {
+    deadlineYears = 5
   }
+
+  return { required, type, deadlineYears }
 }

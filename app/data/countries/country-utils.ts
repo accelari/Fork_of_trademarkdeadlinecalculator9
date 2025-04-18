@@ -14,7 +14,7 @@ export function createExtendedCountry(
     usageProofRequired: boolean
     usageProofYears: number
     usageDeclarationRequired: boolean
-    usageDeclarationYears: number[]
+    usageDeclarationYears?: number[]
     isTerritory: boolean
     memberOf: string[]
     // Felder aus der ersten Tabelle

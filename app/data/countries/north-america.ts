@@ -8,6 +8,73 @@ import {
   combineDeviations,
 } from "./common-deviations"
 
+// Hilfsfunktion für nordamerikanische Länder mit US-ähnlichen Regeln
+function createUSStyleCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
+  return createCategorizedCountry(
+    code,
+    name,
+    "Nordamerika",
+    "direct",
+    combineDeviations(usStyleDeviations, extraDeviations, {
+      additionalNotes: additionalNotes || "Folgt dem US-amerikanischen Markensystem.",
+    }),
+  )
+}
+
+// Hilfsfunktion für karibische Länder mit britischem Common Law System
+function createCaribbeanCommonLawCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
+  return createCategorizedCountry(
+    code,
+    name,
+    "Nordamerika",
+    "direct",
+    combineDeviations(simplePoaDeviations, {
+      calculationBasis: "registration",
+      protectionPeriod: 10,
+      renewalStartMonths: 6,
+      renewalDeadlineMonths: 0,
+      lateRenewalMonths: 6,
+      usageProofRequired: false,
+      vertreterRequired: "Ja",
+      prufungsumfang: "Umfassend",
+      widerspruch: "Ja",
+      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
+      additionalNotes: additionalNotes || "Basiert auf dem britischen Common Law System.",
+      ...extraDeviations,
+    }),
+  )
+}
+
+// Hilfsfunktion für französische Überseegebiete
+function createFrenchOverseasCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
+  return createCategorizedCountry(
+    code,
+    name,
+    "Nordamerika",
+    "direct",
+    combineDeviations({
+      calculationBasis: "registration",
+      protectionPeriod: 10,
+      renewalStartMonths: 6,
+      renewalDeadlineMonths: 0,
+      lateRenewalMonths: 6,
+      usageProofRequired: false,
+      usageProofYears: 5,
+      prufungsumfang: "Formal",
+      widerspruch: "Ja",
+      poaDigitalCopy: "Ja",
+      poaOriginalRequired: "Nein",
+      poaDigitalSignature: "Ja",
+      poaNotarization: "Nein",
+      poaApostille: "Nein",
+      mitgliedschaften: ["WIPO", "Pariser Übereinkunft (über Frankreich)", "TRIPS"],
+      additionalNotes:
+        additionalNotes || "Französisches Überseegebiet, abgedeckt durch französische Markenregistrierung.",
+      ...extraDeviations,
+    }),
+  )
+}
+
 export const northAmericanCountries = [
   createCategorizedCountry("CA", "Kanada", "Nordamerika", "direct", {
     // Nur spezifische Abweichungen oder Besonderheiten angeben
@@ -27,6 +94,12 @@ export const northAmericanCountries = [
       "Besonderheit: Wenn die Marke innerhalb der Nachfrist verlängert wird, fällt in Kanada keine Verspätungsgebühr an. Allerdings muss jeder Anmelder eine kanadische Anschrift für Zustellungen angeben. Seit 2019 fordert CIPO bei Verfahren häufig die Angabe einer in Kanada oder im 'NAFTA-Raum' ansässigen Zustelladresse. Kanada hat 2019 auf ein Klassen-System umgestellt (Nizza-Klassifikation); bei Verlängerung vor 2019 eingetragener Marken muss der Inhaber seine Waren/Dienstleistungen in Klassen einteilen.",
   }),
 
+  createUSStyleCountry(
+    "US",
+    "Vereinigte Staaten von Amerika",
+    "Die USA verlangen eine eidesstattliche Erklärung über die Benutzung der Marke im 5. und 10. Jahr nach der Registrierung sowie bei jeder Verlängerung.",
+  ),
+
   createCategorizedCountry(
     "MX",
     "Mexiko",
@@ -40,138 +113,80 @@ export const northAmericanCountries = [
     }),
   ),
 
-  createCategorizedCountry("US", "Vereinigte Staaten von Amerika", "Nordamerika", "direct", usStyleDeviations),
-
-  createCategorizedCountry(
+  // Karibische Länder mit britischem Common Law System
+  createCaribbeanCommonLawCountry(
     "BB",
     "Barbados",
-    "Nordamerika",
-    "direct",
-    combineDeviations(simplePoaDeviations, {
-      calculationBasis: "registration",
-      renewalStartMonths: 2,
-      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-      additionalNotes:
-        "Markenregistrierung in Barbados gilt für 10 Jahre und kann für weitere 10-Jahres-Perioden verlängert werden. Zwei Monate vor Ablauf der Schutzfrist wird eine Benachrichtigung versandt.",
-    }),
+    "Markenregistrierung in Barbados gilt für 10 Jahre und kann für weitere 10-Jahres-Perioden verlängert werden. Zwei Monate vor Ablauf der Schutzfrist wird eine Benachrichtigung versandt.",
+    { renewalStartMonths: 2 },
   ),
 
-  createCategorizedCountry(
+  createCaribbeanCommonLawCountry(
     "BS",
     "Bahamas",
-    "Nordamerika",
-    "direct",
+    "Unter dem neuen Markenrecht der Bahamas wurde die Schutzfrist von 14 Jahren auf 10 Jahre reduziert, mit entsprechenden 10-Jahres-Verlängerungsperioden.",
     combineDeviations(notarizationAndApostilleDeviations, shortLateRenewalDeviations, {
-      calculationBasis: "registration",
       renewalStartMonths: 3,
       poaApostille: "Nein", // Überschreibt den Wert aus notarizationAndApostilleDeviations
       poaHinweise: "Original-Vollmacht erforderlich für Anmeldung oder Erneuerung.",
-      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-      additionalNotes:
-        "Unter dem neuen Markenrecht der Bahamas wurde die Schutzfrist von 14 Jahren auf 10 Jahre reduziert, mit entsprechenden 10-Jahres-Verlängerungsperioden.",
     }),
   ),
-  createCategorizedCountry("BZ", "Belize", "Nordamerika", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre
 
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Standardmäßige Nachfrist von 6 Monaten
+  // Weitere karibische Länder
+  createCaribbeanCommonLawCountry("BZ", "Belize"),
+  createCaribbeanCommonLawCountry(
+    "BM",
+    "Bermuda",
+    "Die initiale Registrierungsperiode beträgt derzeit 7 Jahre, mit Erneuerungen für 14-Jahres-Perioden. Nach dem neuen Markengesetz (in Kraft ab Februar 2025) wird sich dies auf 10 Jahre initial und 10 Jahre je Erneuerung ändern.",
+    { protectionPeriod: 7 },
+  ),
 
-    usageProofRequired: false, // Kein Nutzungsnachweis erforderlich
-    usageProofYears: 0,
+  // Französische Überseegebiete
+  createFrenchOverseasCountry("GP", "Guadeloupe"),
+  createFrenchOverseasCountry("MQ", "Martinique"),
+  createFrenchOverseasCountry("BL", "Saint-Barthélemy"),
+  createFrenchOverseasCountry("MF", "Saint-Martin"),
+  createFrenchOverseasCountry("PM", "Saint-Pierre und Miquelon"),
 
-    usageDeclarationRequired: false, // Keine Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
+  // US-Territorien
+  createUSStyleCountry("GU", "Guam", "Guam ist ein nicht inkorporiertes Territorium der Vereinigten Staaten."),
+  createUSStyleCountry(
+    "PR",
+    "Puerto Rico",
+    "Puerto Rico ist ein nicht inkorporiertes Territorium der Vereinigten Staaten.",
+  ),
+  createUSStyleCountry(
+    "VI",
+    "Amerikanische Jungferninseln",
+    "Die Amerikanischen Jungferninseln sind ein nicht inkorporiertes Territorium der Vereinigten Staaten.",
+  ),
 
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Markenregistrierungen in Belize sind für 10 Jahre gültig und können unbegrenzt für weitere 10-Jahres-Perioden verlängert werden. Für die Anmeldung wird eine original unterschriebene, notariell beglaubigte und legalisierte Vollmacht benötigt.",
-  }),
-  createCategorizedCountry("BM", "Bermuda", "Nordamerika", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 7, // Aktuelle Schutzfrist: 7 Jahre initial (ändert sich zu 10 Jahren mit neuem Gesetz)
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein Nutzungsnachweis erforderlich
-    usageProofYears: 0,
-
-    usageDeclarationRequired: false, // Keine Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter ist für ausländische Anmelder erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Nein", // Keine notarielle Beglaubigung erforderlich
-    poaApostille: "Nein", // Keine Apostille erforderlich
-    poaHinweise: "Vollmacht erforderlich für Registrierung und Verlängerung.",
-
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Die initiale Registrierungsperiode beträgt derzeit 7 Jahre, mit Erneuerungen für 14-Jahres-Perioden. Nach dem neuen Markengesetz (in Kraft ab Februar 2025) wird sich dies auf 10 Jahre initial und 10 Jahre je Erneuerung ändern.",
-  }),
+  // Weitere Länder mit individuellen Regeln
   createCategorizedCountry("CR", "Costa Rica", "Nordamerika", "direct", {
     calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre
-
-    renewalStartMonths: 12, // Verlängerungsantrag kann 12 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein Nutzungsnachweis für Erneuerung erforderlich
+    protectionPeriod: 10,
+    renewalStartMonths: 12,
+    renewalDeadlineMonths: 0,
+    lateRenewalMonths: 6,
+    usageProofRequired: false,
     usageProofYears: 0,
-
-    usageDeclarationRequired: false, // Keine spezifische Benutzungserklärung erforderlich
+    usageDeclarationRequired: false,
     usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter für ausländische Anmelder erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
+    vertreterRequired: "Ja",
+    prufungsumfang: "Umfassend",
+    widerspruch: "Ja",
+    poaVertreterRequired: "Ja",
+    poaDigitalCopy: "Nein",
+    poaOriginalRequired: "Ja",
+    poaDigitalSignature: "Nein",
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
     poaHinweise: "Beglaubigte Vollmacht erforderlich, mit Apostille oder Legalisierung durch das Konsulat.",
-
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
+    priorityDeadlineMonths: 6,
     priorityDocumentDeadlineMonths: 3,
-
     additionalNotes:
-      "Markenregistrierungen in Costa Rica haben eine Schutzfrist von 10 Jahren und können unbegrenzt für weitere 10-Jahres-Perioden verlängert werden. Die Erneuerung kann bis zu 12 Monate vor Ablauf eingereicht werden, mit einer Nachfrist von 6 Monaten nach Ablauf. Kein Nutzungsnachweis ist für die Erneuerung erforderlich.",
+      "Markenregistrierungen in Costa Rica haben eine Schutzfrist von 10 Jahren und können unbegrenzt für weitere 10-Jahres-Perioden verlängert werden.",
   }),
   createCategorizedCountry("CU", "Kuba", "Nordamerika", "direct", {
     calculationBasis: "registration",

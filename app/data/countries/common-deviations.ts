@@ -66,6 +66,14 @@ export const originalPoaDeviations = {
   poaHinweise: "Original der Vollmacht erforderlich.",
 }
 
+// Abweichungen für Länder mit Nachweis nur auf Antrag Dritter
+export const usageProofRequiredOnDemandDeviations = {
+  usageProofType: "Nachweis nur auf Antrag Dritter erforderlich",
+  usageDeclarationType: "Keine regelmäßige Benutzungserklärung erforderlich",
+  lateFilingMonths: 0, // Keine spezifische Nachfrist
+  filingPeriodStart: "Nach Antrag eines Dritten",
+}
+
 // Hilfsfunktion zum Kombinieren von Abweichungen
 export function combineDeviations(...deviationSets: Record<string, any>[]): Record<string, any> {
   return Object.assign({}, ...deviationSets)

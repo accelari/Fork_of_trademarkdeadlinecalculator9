@@ -1,33 +1,56 @@
-import { createExtendedCountry } from "./country-utils"
+import { createCategorizedCountry } from "./country-utils"
+import { simplePoaDeviations, combineDeviations } from "./common-deviations"
+
+// Hilfsfunktion für pazifische Inselstaaten mit einfachen Vollmachtsregeln
+function createPacificIslandCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
+  return createCategorizedCountry(
+    code,
+    name,
+    "Ozeanien",
+    "direct",
+    combineDeviations(simplePoaDeviations, {
+      calculationBasis: "registration",
+      protectionPeriod: 10,
+      renewalStartMonths: 6,
+      renewalDeadlineMonths: 0,
+      lateRenewalMonths: 6,
+      usageProofRequired: false,
+      usageProofYears: 5,
+      vertreterRequired: "Ja",
+      prufungsumfang: "Umfassend",
+      widerspruch: "Ja",
+      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
+      additionalNotes: additionalNotes || "Pazifischer Inselstaat mit einfachen Vollmachtsregeln.",
+      ...extraDeviations,
+    }),
+  )
+}
+
+function createUSStyleCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
+  return createCategorizedCountry(code, name, "Ozeanien", "direct", {
+    calculationBasis: "registration",
+    protectionPeriod: 10,
+    renewalStartMonths: 6,
+    renewalDeadlineMonths: 0,
+    lateRenewalMonths: 6,
+    usageProofRequired: true,
+    usageProofYears: 5,
+    vertreterRequired: "Nein",
+    prufungsumfang: "Umfassend",
+    widerspruch: "Ja",
+    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
+    additionalNotes: additionalNotes || "Anlehnung an US-amerikanisches Rechtssystem.",
+    ...extraDeviations,
+  })
+}
 
 export const oceaniaCountries = [
-  createExtendedCountry("AU", "Australien", "Ozeanien", "direct", {
-    calculationBasis: "application",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Anmeldetag der Marke
-
-    renewalStartMonths: 12, // Der Verlängerungsantrag kann bis zu 12 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Zahlung der Verlängerungsgebühr ist bis zum Ablaufdatum ohne Zuschlag möglich
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten nach Schutzende, innerhalb der gegen Zuschlag verlängert werden kann
-
-    usageProofRequired: false, // Es besteht keine Pflicht zur regelmäßigen Einreichung von Nutzungsbelegen
-    usageProofYears: 3, // Ist eine Marke ab Registrierung 3 Jahre lang ununterbrochen nicht benutzt, kann jeder Dritte einen Verfallsantrag stellen
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung nötig
-    usageDeclarationYears: [], // Keine spezifischen Jahre für Erklärungen
-
-    vertreterRequired: "Nein", // Kein gesetzlicher Zwang zur Vertretung durch einen lokalen Anwalt
-    prufungsumfang: "Umfassend", // Vollprüfung auf absolute und relative Schutzhindernisse
-    widerspruch: "Ja", // Binnen 2 Monaten nach Veröffentlichung des Prüfungsbeschlusses kann ein Dritter Widerspruch einlegen
-
-    poaVertreterRequired: "Nein", // Keine formelle Vollmacht erforderlich
-    poaDigitalCopy: "Ja", // Wird akzeptiert, falls benötigt
-    poaOriginalRequired: "Nein", // Original nicht erforderlich
-    poaDigitalSignature: "Ja", // Digitale Signatur wird akzeptiert
-    poaNotarization: "Nein", // Keine notarielle Beglaubigung erforderlich
-    poaApostille: "Nein", // Keine Apostille erforderlich
-    poaHinweise:
-      "Eine schriftliche Vollmacht ist für die Beauftragung eines australischen Vertreters nicht einzureichen (die Bestellung erfolgt formlos)",
-
+  // Australien
+  createCategorizedCountry("AU", "Australien", "Ozeanien", "direct", {
+    // Nur spezifische Abweichungen von den Standardregeln
+    usageProofYears: 3,
+    additionalNotes:
+      "Allerdings muss für die Korrespondenz eine australische Zustelladresse angegeben werden. Kollisionshindernisse können durch Vorlage von Consent Letters überwunden werden.",
     mitgliedschaften: [
       "WIPO (seit 1972)",
       "Pariser Verbandsübereinkunft (seit 1925)",
@@ -35,739 +58,160 @@ export const oceaniaCountries = [
       "Nizza-Klassifikation (seit 2007)",
       "Madrid-Protokoll (seit 2001)",
     ],
-
-    priorityDeadlineMonths: 6, // 6 Monate gemäß PVÜ
-    priorityDocumentDeadlineMonths: 0, // Eine Kopie der Voranmeldung wird vom australischen Amt im Regelfall nicht verlangt
-
-    usageProofType: "Eidesstattliche Erklärung mit Nachweisen über ernsthafte Benutzung (bei Antrag)",
-    usageDeclarationType: "Keine regelmäßige Benutzungserklärung erforderlich",
-    usageProofDeadlineYears: 3,
-    usageDeclarationDeadlineYears: null,
-    lateFilingMonths: 0, // Keine spezifische Nachfrist
-    filingPeriodStart: "Nach Antrag eines Dritten (3 Monate Frist)",
-
-    additionalNotes:
-      "Allerdings muss für die Korrespondenz eine australische Zustelladresse angegeben werden. In der Praxis erfolgt dies meist über einen in Australien registrierten Markenanwalt oder -agenten. Kollisionshindernisse können durch Vorlage von Consent Letters überwunden werden – das australische Amt akzeptiert Abgrenzungsvereinbarungen in vielen Fällen. Australien gestattet Mehrklassenanmeldungen.",
   }),
+
   // Neuseeland
-  createExtendedCountry("NZ", "Neuseeland", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Registrierungsdatum
-
-    renewalStartMonths: 12, // Verlängerungsantrag kann 12 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 3, // Nach 3 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Nein", // Kein lokaler Vertreter zwingend erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Nein", // Keine Vertretervollmacht erforderlich
-    poaDigitalCopy: "Ja", // Digitale Kopie kann ausreichend sein
-    poaOriginalRequired: "Nein", // Original der Vollmacht nicht zwingend erforderlich
-    poaDigitalSignature: "Ja", // Digitale Signatur kann akzeptiert werden
-    poaNotarization: "Nein", // Keine notarielle Beglaubigung erforderlich
-    poaApostille: "Nein", // Keine Apostille erforderlich
-    poaHinweise:
-      "In der Regel keine Vollmacht erforderlich. Falls benötigt, ist eine einfach unterschriebene Vollmacht ausreichend.",
-
+  createCategorizedCountry("NZ", "Neuseeland", "Ozeanien", "direct", {
+    usageProofYears: 3,
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
     additionalNotes:
-      "Markenregistrierungen in Neuseeland sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Intellectual Property Office of New Zealand (IPONZ). Neuseeland ist seit 2012 Mitglied des Madrid-Protokolls. Eine Marke kann nach 3 Jahren Nichtbenutzung angefochten werden. Neuseeland hat ein modernes und effizientes Markensystem mit Online-Einreichungsmöglichkeiten.",
+      "Markenregistrierungen in Neuseeland sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden.",
   }),
 
-  // Cookinseln
-  createExtendedCountry("CK", "Cookinseln", "Ozeanien", "direct", {
+  // Cookinseln - Sonderfall ohne formales Markeneintragungsverfahren
+  createCategorizedCountry("CK", "Cookinseln", "Ozeanien", "direct", {
     calculationBasis: "none",
-    protectionPeriod: 0, // Kein formales Markeneintragungsverfahren vorhanden
-
-    renewalStartMonths: 0, // Entfällt - mangels Registereintragung kein formales Verlängerungsverfahren
-    renewalDeadlineMonths: 0, // Entfällt
-    lateRenewalMonths: 0, // Nicht anwendbar
-
-    usageProofRequired: false, // Der Schutz resultiert ausschließlich aus tatsächlicher Benutzung
-
-    usageDeclarationRequired: false, // Keine Benutzungserklärung erforderlich
-    usageDeclarationYears: [], // Keine festen Zeitpunkte
-
-    vertreterRequired: "Nein", // Ein formeller Vertreter ist für eine Bekanntmachung nicht vorgeschrieben
-    prufungsumfang: "Keine", // Es gibt keine Markenbehörde
-    widerspruch: "Nein", // Kein Widerspruchsverfahren
-
-    poaVertreterRequired: "Nein", // Nicht erforderlich
-    poaDigitalCopy: "Nein", // Nicht anwendbar
-    poaOriginalRequired: "Nein", // Nicht anwendbar
-    poaDigitalSignature: "Nein", // Nicht anwendbar
-    poaNotarization: "Nein", // Nicht anwendbar
-    poaApostille: "Nein", // Nicht anwendbar
-    poaHinweise: "Keine formelle Vollmachtanforderung, da kein amtlicher Eintragungsprozess stattfindet",
-
-    mitgliedschaften: ["WIPO"], // Die Cook-Inseln sind seit 2016 Mitglied der WIPO, aber kein Vertragsstaat der Pariser Verbandsübereinkunft und nicht Mitglied der WTO
-
-    priorityDeadlineMonths: 0, // Mangels Paris-Konventions-Beitritt kein prioritätsbasiertes Anmeldesystem
-    priorityDocumentDeadlineMonths: 0, // Nicht anwendbar
-
+    protectionPeriod: 0,
+    renewalStartMonths: 0,
+    renewalDeadlineMonths: 0,
+    lateRenewalMonths: 0,
+    prufungsumfang: "Formal",
+    widerspruch: "Nein",
+    mitgliedschaften: ["WIPO"],
+    priorityDeadlineMonths: 0,
+    priorityDocumentDeadlineMonths: 0,
     additionalNotes:
-      "In den Cook-Inseln existiert derzeit noch kein nationales Markenregister. Markenschutz beruht auf Gewohnheitsrecht (Common Law) und entsteht durch tatsächliche Benutzung der Marke im Geschäftsverkehr. Unternehmen veröffentlichen häufig 'cautionary notices' in lokalen Zeitungen, um auf ihre Markenrechte hinzuweisen. Diese Bekanntmachungen dienen als Warnung und können unbefristet wirksam sein, solange die Marke benutzt wird. Markeninhabern wird empfohlen, ihre Marken durch lokale Nutzung und regelmäßige Bekanntmachungen zu schützen. Die Einführung eines eigenen Markenregisters ist angestrebt, wurde aber noch nicht umgesetzt.",
+      "In den Cook-Inseln existiert derzeit noch kein nationales Markenregister. Markenschutz beruht auf Gewohnheitsrecht (Common Law).",
   }),
 
   // Fidschi
-  createExtendedCountry("FJ", "Fidschi", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Registrierungsdatum
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Nein", // Keine notarielle Beglaubigung erforderlich
-    poaApostille: "Nein", // Keine Apostille erforderlich
-    poaHinweise: "Einfach unterschriebene Vollmacht ist ausreichend.",
-
+  createCategorizedCountry("FJ", "Fidschi", "Ozeanien", "direct", {
+    usageProofYears: 5,
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
     additionalNotes:
-      "Markenregistrierungen in Fidschi sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Fiji Intellectual Property Office (FIPO). Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden. Fidschi folgt weitgehend dem britischen Markensystem.",
+      "Markenregistrierungen in Fidschi sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden.",
   }),
 
   // Französisch-Polynesien
-  createExtendedCountry("PF", "Französisch-Polynesien", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre (wie in Frankreich)
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter für ausländische Anmelder erforderlich
-    prufungsumfang: "Formell", // Hauptsächlich formelle Prüfung (wie in Frankreich)
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Ja", // Digitale Kopie kann ausreichend sein
-    poaOriginalRequired: "Nein", // Original der Vollmacht nicht zwingend erforderlich
-    poaDigitalSignature: "Ja", // Digitale Signatur kann akzeptiert werden
-    poaNotarization: "Nein", // Keine notarielle Beglaubigung erforderlich
-    poaApostille: "Nein", // Keine Apostille erforderlich
-    poaHinweise: "Einfache Vollmacht ist in der Regel ausreichend.",
-
+  createCategorizedCountry("PF", "Französisch-Polynesien", "Ozeanien", "direct", {
+    usageProofYears: 5,
+    prufungsumfang: "Formal",
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft (über Frankreich)", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
     additionalNotes:
-      "Französisch-Polynesien ist ein französisches Überseegebiet und wird von der französischen Markenregistrierung abgedeckt. Markenregistrierungen sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden.",
+      "Französisch-Polynesien ist ein französisches Überseegebiet und wird von der französischen Markenregistrierung abgedeckt.",
   }),
 
   // Guam
-  createExtendedCountry("GU", "Guam", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre (wie in den USA)
-
-    renewalStartMonths: 12, // Verlängerungsantrag kann 12 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: true, // Nutzungsnachweis erforderlich (wie in den USA)
-    usageProofYears: 5, // Nach US-Recht im 5. Jahr
-
-    usageDeclarationRequired: true, // Benutzungserklärung erforderlich (wie in den USA)
-    usageDeclarationYears: [5, 10, 20, 30, 40, 50], // Wie in den USA
-
-    vertreterRequired: "Ja", // US-Anwalt für ausländische Anmelder erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung (wie in den USA)
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Ja", // Digitale Kopie ausreichend
-    poaOriginalRequired: "Nein", // Original der Vollmacht nicht erforderlich
-    poaDigitalSignature: "Ja", // Digitale Signatur akzeptiert
-    poaNotarization: "Nein", // Keine notarielle Beglaubigung erforderlich
-    poaApostille: "Nein", // Keine Apostille erforderlich
-    poaHinweise: "US-Anwalt für ausländische Anmelder seit 2019 verpflichtend.",
-
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft (über USA)", "TRIPS", "Madrid-Protokoll (über USA)"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Guam ist ein nicht inkorporiertes Territorium der Vereinigten Staaten. US-Markenregistrierungen gelten automatisch in Guam. Es gibt kein separates Markenregister. Markeninhaber müssen US-amerikanisches Bundesrecht beachten.",
-  }),
+  createUSStyleCountry("GU", "Guam", "Guam ist ein nicht inkorporiertes Territorium der Vereinigten Staaten."),
 
   // Kiribati
-  createExtendedCountry("KI", "Kiribati", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 7, // Schutzdauer: 7 Jahre initial ab Registrierungsdatum (basierend auf britischem Common Law)
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Begrenzt", // Begrenzte formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
-    mitgliedschaften: ["WIPO"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Kiribati hat ein auf Common Law basierendes Markenschutzsystem, das stark vom britischen System beeinflusst ist. Markenregistrierungen sind initial für 7 Jahre gültig und können für weitere 14-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Registry of Companies. Aufgrund der begrenzten lokalen Infrastruktur kann die Bearbeitung langwierig sein.",
+  createPacificIslandCountry("KI", "Kiribati", "Kiribati hat ein auf Common Law basierendes Markenschutzsystem.", {
+    protectionPeriod: 7,
+    prufungsumfang: "Beschränkt",
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
   }),
 
-  // Marshallinseln
-  createExtendedCountry("MH", "Marshallinseln", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Registrierungsdatum
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Begrenzt", // Begrenzte formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
-    mitgliedschaften: ["WIPO"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Die Marshallinseln haben ein Markengesetz (Trademark Act von 2018), das Schutz für 10 Jahre mit Verlängerungsmöglichkeit für weitere 10-Jahres-Perioden vorsieht. Die Registrierung erfolgt beim Business Registry Office. Das Markenschutzsystem ist stark vom US-amerikanischen System beeinflusst. Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden.",
+  // Weitere Länder Ozeaniens mit ähnlichem Muster...
+  createPacificIslandCountry("MH", "Marshallinseln", undefined, {
+    prufungsumfang: "Beschränkt",
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
   }),
 
-  // Mikronesien
-  createExtendedCountry("FM", "Mikronesien", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Registrierungsdatum
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Begrenzt", // Begrenzte formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
-    mitgliedschaften: ["WIPO"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Mikronesien hat ein auf dem US-System basierendes Markenrecht. Markenregistrierungen sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Department of Resources and Development. Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden.",
+  createPacificIslandCountry("FM", "Mikronesien", undefined, {
+    prufungsumfang: "Beschränkt",
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
   }),
 
-  // Nauru
-  createExtendedCountry("NR", "Nauru", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 7, // Schutzdauer: 7 Jahre initial ab Registrierungsdatum (basierend auf britischem Common Law)
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Begrenzt", // Begrenzte formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
-    mitgliedschaften: ["WIPO"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Nauru hat ein auf dem britischen Common Law basierendes Markenschutzsystem. Markenregistrierungen sind initial für 7 Jahre gültig und können für weitere 14-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Department of Justice and Border Control. Aufgrund der begrenzten lokalen Infrastruktur kann die Bearbeitung langwierig sein.",
+  createPacificIslandCountry("NR", "Nauru", undefined, {
+    protectionPeriod: 7,
+    prufungsumfang: "Beschränkt",
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
   }),
 
-  // Neukaledonien
-  createExtendedCountry("NC", "Neukaledonien", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre (wie in Frank  {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre (wie in Frankreich)
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter für ausländische Anmelder erforderlich
-    prufungsumfang: "Formell", // Hauptsächlich formelle Prüfung (wie in Frankreich)
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Ja", // Digitale Kopie kann ausreichend sein
-    poaOriginalRequired: "Nein", // Original der Vollmacht nicht zwingend erforderlich
-    poaDigitalSignature: "Ja", // Digitale Signatur kann akzeptiert werden
-    poaNotarization: "Nein", // Keine notarielle Beglaubigung erforderlich
-    poaApostille: "Nein", // Keine Apostille erforderlich
-    poaHinweise: "Einfache Vollmacht ist in der Regel ausreichend.",
-
+  createCategorizedCountry("NC", "Neukaledonien", "Ozeanien", "direct", {
+    usageProofYears: 5,
+    prufungsumfang: "Formal",
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft (über Frankreich)", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
     additionalNotes:
-      "Neukaledonien ist ein französisches Überseegebiet mit besonderem Status und wird von der französischen Markenregistrierung abgedeckt. Markenregistrierungen sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden.",
+      "Neukaledonien ist ein französisches Überseegebiet mit besonderem Status und wird von der französischen Markenregistrierung abgedeckt.",
   }),
 
-  // Niue
-  createExtendedCountry("NU", "Niue", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 7, // Schutzdauer: 7 Jahre initial ab Registrierungsdatum (basierend auf neuseeländischem/britischem Common Law)
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Begrenzt", // Begrenzte formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
-    mitgliedschaften: ["WIPO"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Niue hat ein auf dem neuseeländischen/britischen Common Law basierendes Markenschutzsystem. Markenregistrierungen sind initial für 7 Jahre gültig und können für weitere 14-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Office of the Registrar of Companies. Aufgrund der begrenzten lokalen Infrastruktur kann die Bearbeitung langwierig sein.",
+  createPacificIslandCountry("NU", "Niue", undefined, {
+    protectionPeriod: 7,
+    prufungsumfang: "Beschränkt",
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
   }),
 
-  // Palau
-  createExtendedCountry("PW", "Palau", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Registrierungsdatum
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Begrenzt", // Begrenzte formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
-    mitgliedschaften: ["WIPO"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Palau hat ein auf dem US-System basierendes Markenrecht. Markenregistrierungen sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Office of the Attorney General. Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden.",
+  createPacificIslandCountry("PW", "Palau", undefined, {
+    prufungsumfang: "Beschränkt",
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
   }),
 
-  // Papua-Neuguinea
-  createExtendedCountry("PG", "Papua-Neuguinea", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Registrierungsdatum
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Markenregistrierungen in Papua-Neuguinea sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Intellectual Property Office of Papua New Guinea. Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden. Das Markensystem basiert auf dem Trademarks Act von 1978.",
+  createPacificIslandCountry("PG", "Papua-Neuguinea", undefined, {
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
   }),
 
-  // Pitcairninseln
-  createExtendedCountry("PN", "Pitcairninseln", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Registrierungsdatum (UK-System)
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Begrenzt", // Begrenzte formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
+  createPacificIslandCountry("PN", "Pitcairninseln", undefined, {
+    prufungsumfang: "Beschränkt",
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft (über UK)"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
     additionalNotes:
-      "Die Pitcairninseln sind ein britisches Überseegebiet. UK-Registrierungen können ausgedehnt werden, oder es können direkte Anmeldungen erfolgen. Markenregistrierungen sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Anmeldung erfolgt über das britische Register mit Erweiterung auf die Pitcairninseln.",
+      "Die Pitcairninseln sind ein britisches Überseegebiet. UK-Registrierungen können ausgedehnt werden, oder es können direkte Anmeldungen erfolgen.",
   }),
 
-  // Samoa
-  createExtendedCountry("WS", "Samoa", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Registrierungsdatum
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 3, // Nach 3 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
+  createPacificIslandCountry("WS", "Samoa", undefined, {
+    usageProofYears: 3,
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
     additionalNotes:
-      "Markenregistrierungen in Samoa sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Registrar of Companies, Ministry of Commerce, Industry and Labour. Samoa ist seit 2019 Mitglied des Madrid-Protokolls. Eine Marke kann nach 3 Jahren Nichtbenutzung angefochten werden. Das neue Markengesetz von 2018 hat das System modernisiert.",
+      "Samoa ist seit 2019 Mitglied des Madrid-Protokolls. Das neue Markengesetz von 2018 hat das System modernisiert.",
   }),
 
-  // Salomonen
-  createExtendedCountry("SB", "Salomonen", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 7, // Schutzdauer: 7 Jahre initial ab Registrierungsdatum (basierend auf britischem Common Law)
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Begrenzt", // Begrenzte formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
+  createPacificIslandCountry("SB", "Salomonen", undefined, {
+    protectionPeriod: 7,
+    prufungsumfang: "Beschränkt",
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
     mitgliedschaften: ["WIPO", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Die Salomonen haben ein auf dem britischen Common Law basierendes Markenschutzsystem. Markenregistrierungen sind initial für 7 Jahre gültig und können für weitere 14-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Company Haus, Foreign Investment Division. Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden.",
   }),
 
-  // Tonga
-  createExtendedCountry("TO", "Tonga", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Registrierungsdatum
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
+  createPacificIslandCountry("TO", "Tonga", undefined, {
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Markenregistrierungen in Tonga sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Ministry of Labour, Commerce and Industries, Intellectual Property Unit. Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden. Tonga hat ein modernes Markengesetz (Industrial Property Act von 2002).",
+    additionalNotes: "Tonga hat ein modernes Markengesetz (Industrial Property Act von 2002).",
   }),
 
-  // Tuvalu
-  createExtendedCountry("TV", "Tuvalu", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 7, // Schutzdauer: 7 Jahre initial ab Registrierungsdatum (basierend auf britischem Common Law)
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Begrenzt", // Begrenzte formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
+  createPacificIslandCountry("TV", "Tuvalu", undefined, {
+    protectionPeriod: 7,
+    prufungsumfang: "Beschränkt",
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
     mitgliedschaften: ["WIPO"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Tuvalu hat ein auf dem britischen Common Law basierendes Markenschutzsystem. Markenregistrierungen sind initial für 7 Jahre gültig und können für weitere 14-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Companies and Business Registration Department. Aufgrund der begrenzten lokalen Infrastruktur kann die Bearbeitung langwierig sein.",
   }),
 
-  // Vanuatu
-  createExtendedCountry("VU", "Vanuatu", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Registrierungsdatum
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis für Erneuerung erforderlich
-    usageProofYears: 3, // Nach 3 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine regelmäßige Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
-    poaHinweise: "Notariell beglaubigte und legalisierte Vollmacht erforderlich.",
-
+  createPacificIslandCountry("VU", "Vanuatu", undefined, {
+    usageProofYears: 3,
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Markenregistrierungen in Vanuatu sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Vanuatu Intellectual Property Office (VIPO). Eine Marke kann nach 3 Jahren Nichtbenutzung angefochten werden. Vanuatu hat ein modernes Markengesetz (Trademarks Act No. 1 von 2003).",
+    additionalNotes: "Vanuatu hat ein modernes Markengesetz (Trademarks Act No. 1 von 2003).",
   }),
 
-  // Wallis und Futuna
-  createExtendedCountry("WF", "Wallis und Futuna", "Ozeanien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre (wie in Frankreich)
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist von 6 Monaten für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein spezifischer Nutzungsnachweis erforderlich
-    usageProofYears: 5, // Nach 5 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter für ausländische Anmelder erforderlich
-    prufungsumfang: "Formell", // Hauptsächlich formelle Prüfung (wie in Frankreich)
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Ja", // Digitale Kopie kann ausreichend sein
-    poaOriginalRequired: "Nein", // Original der Vollmacht nicht zwingend erforderlich
-    poaDigitalSignature: "Ja", // Digitale Signatur kann akzeptiert werden
-    poaNotarization: "Nein", // Keine notarielle Beglaubigung erforderlich
-    poaApostille: "Nein", // Keine Apostille erforderlich
-    poaHinweise: "Einfache Vollmacht ist in der Regel ausreichend.",
-
+  createCategorizedCountry("WF", "Wallis und Futuna", "Ozeanien", "direct", {
+    usageProofYears: 5,
+    prufungsumfang: "Formal",
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft (über Frankreich)", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
     additionalNotes:
-      "Wallis und Futuna ist ein französisches Überseegebiet und wird von der französischen Markenregistrierung abgedeckt. Markenregistrierungen sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden.",
+      "Wallis und Futuna ist ein französisches Überseegebiet und wird von der französischen Markenregistrierung abgedeckt.",
   }),
 ]

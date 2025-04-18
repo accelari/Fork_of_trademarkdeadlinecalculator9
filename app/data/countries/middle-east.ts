@@ -1,87 +1,143 @@
 import { createCategorizedCountry } from "./country-utils"
+import { notarizationAndApostilleDeviations, combineDeviations } from "./common-deviations"
+
+// Hilfsfunktion für GCC-Länder (Gulf Cooperation Council)
+function createGCCCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
+  return createCategorizedCountry(
+    code,
+    name,
+    "Naher Osten",
+    "direct",
+    combineDeviations(notarizationAndApostilleDeviations, {
+      calculationBasis: "application",
+      protectionPeriod: 10,
+      renewalStartMonths: 12,
+      renewalDeadlineMonths: 0,
+      lateRenewalMonths: 6,
+      usageProofRequired: false,
+      usageProofYears: 5,
+      vertreterRequired: "Ja",
+      prufungsumfang: "Umfassend",
+      widerspruch: "Ja",
+      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
+      additionalNotes: additionalNotes || "Mitglied des Golf-Kooperationsrats (GCC).",
+      ...extraDeviations,
+    }),
+  )
+}
+
+// Hilfsfunktion für Länder im Nahen Osten mit strengen Vollmachtsanforderungen
+function createMiddleEasternCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
+  return createCategorizedCountry(
+    code,
+    name,
+    "Naher Osten",
+    "direct",
+    combineDeviations(notarizationAndApostilleDeviations, {
+      calculationBasis: "registration",
+      protectionPeriod: 10,
+      renewalStartMonths: 6,
+      renewalDeadlineMonths: 0,
+      lateRenewalMonths: 6,
+      usageProofRequired: true,
+      usageProofYears: 5,
+      vertreterRequired: "Ja",
+      prufungsumfang: "Umfassend",
+      widerspruch: "Ja",
+      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
+      additionalNotes: additionalNotes || "Land im Nahen Osten mit strengen Vollmachtsanforderungen.",
+      ...extraDeviations,
+    }),
+  )
+}
 
 export const middleEastCountries = [
-  // Nahost-Länder mit automatischer Kategorisierung
-  createCategorizedCountry("AE", "Vereinigte Arabische Emirate", "Naher Osten", "direct", {
-    renewalStartMonths: 12,
-    renewalDeadlineMonths: 0,
-    lateRenewalMonths: 6,
-    usageProofYears: 5,
-    poaHinweise: "Eine im Herkunftsland notarielle und konsularisch legalisierte Vollmacht ist erforderlich",
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"], // Madrid-Protokoll seit 28.12.2021
+  createGCCCountry(
+    "AE",
+    "Vereinigte Arabische Emirate",
+    "Marken mit alkoholbezogenen Waren/Dienstleistungen (z.B. Klasse 33, Bars) sind nicht zulässig. Bei Nichterwiderung eines Widerspruchs erfolgt Stattgabe standardmäßig.",
+    {
+      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"], // Madrid-Protokoll seit 28.12.2021
+      poaHinweise: "Eine im Herkunftsland notarielle und konsularisch legalisierte Vollmacht ist erforderlich",
+    },
+  ),
 
-    additionalNotes:
-      "Marken mit alkoholbezogenen Waren/Dienstleistungen (z.B. Klasse 33, Bars) sind nicht zulässig. Bei Nichterwiderung eines Widerspruchs erfolgt Stattgabe standardmäßig. Markeninhaber müssen nachweisen können, dass die Marke ernsthaft im geschäftlichen Verkehr in den VAE genutzt wurde, wenn ein Antrag auf Löschung wegen 5-jähriger Nichtbenutzung gestellt wird. Prioritätsunterlagen müssen mit arabischer Übersetzung eingereicht werden.",
-  }),
+  createGCCCountry(
+    "SA",
+    "Saudi-Arabien",
+    "Saudi-Arabien erlaubt seit Umsetzung des GCC-Markengesetzes Mehrklassenanmeldungen. Alle Anmeldungen und Unterlagen müssen in Arabisch eingereicht werden.",
+    {
+      poaHinweise:
+        "Die Vollmacht muss vom Markeninhaber unterschrieben, notariell beglaubigt und anschließend durch ein saudi-arabisches Konsulat legalisiert werden",
+      mitgliedschaften: [
+        "WIPO (seit 1982)",
+        "Pariser Verbandsübereinkunft (seit 2004)",
+        "WTO/TRIPS (seit 2005)",
+        "Madrid-Protokoll (seit März 2022)",
+        "Nizza-Klassifikation (seit 2021)",
+      ],
+    },
+  ),
 
-  createCategorizedCountry("IQ", "Irak", "Naher Osten", "direct", {
-    renewalStartMonths: 6,
-    renewalDeadlineMonths: 0,
+  createGCCCountry(
+    "QA",
+    "Katar",
+    "Katar verlangt bei Marken in nicht-arabischer Sprache eine arabische Übersetzung/Transkription im Antrag anzugeben. Katar hat 2016 das einheitliche GCC-Markengesetz implementiert.",
+    {
+      renewalStartMonths: 6,
+      lateRenewalMonths: 2, // Nur 60 Tage Nachfrist
+      poaHinweise:
+        "Die Vollmacht muss notariell beglaubigt und konsularisch legalisiert sein durch die Botschaft Katars",
+      mitgliedschaften: [
+        "Pariser Übereinkunft (seit 2000)",
+        "Madrid-Protokoll (seit 2011)",
+        "GCC-Markengesetz (seit 2016)",
+      ],
+    },
+  ),
+
+  createGCCCountry("BH", "Bahrain"),
+  createGCCCountry("KW", "Kuwait"),
+  createGCCCountry("OM", "Oman"),
+
+  // Weitere Länder im Nahen Osten
+  createMiddleEasternCountry("IQ", "Irak", "Alle Dokumente müssen ins Arabische übersetzt werden.", {
     lateRenewalMonths: 3,
-    usageProofYears: 5,
-    poaHinweise:
-      "Notariell beglaubigte und legalisierte Vollmacht erforderlich, zusätzlich konsularische Beglaubigung durch die irakische Botschaft.",
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft"],
-    additionalNotes:
-      "Markenregistrierungen im Irak sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Iraqi Trademark Office. Alle Dokumente müssen ins Arabische übersetzt werden. Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden. Aufgrund der politischen Situation kann es zu Verzögerungen bei der Bearbeitung kommen.",
   }),
 
-  createCategorizedCountry("IR", "Iran", "Naher Osten", "direct", {
-    renewalStartMonths: 6,
-    renewalDeadlineMonths: 0,
-    lateRenewalMonths: 6,
+  createMiddleEasternCountry("IR", "Iran", "Alle Dokumente müssen ins Persische übersetzt werden.", {
     usageProofYears: 3,
-    poaHinweise:
-      "Notariell beglaubigte und legalisierte Vollmacht erforderlich, zusätzlich konsularische Beglaubigung durch die iranische Botschaft.",
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "Madrid-Abkommen", "Madrid-Protokoll"],
-    additionalNotes:
-      "Markenregistrierungen im Iran sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Intellectual Property Center of Iran. Der Iran ist sowohl Mitglied des Madrid-Abkommens als auch des Madrid-Protokolls. Alle Dokumente müssen ins Persische übersetzt werden. Eine Marke kann nach 3 Jahren Nichtbenutzung angefochten werden. Aufgrund internationaler Sanktionen können Schwierigkeiten bei der Anmeldung und Aufrechterhaltung von Markenrechten auftreten.",
+  }),
+
+  createMiddleEasternCountry("JO", "Jordanien", "Alle Dokumente müssen ins Arabische übersetzt werden.", {
+    lateRenewalMonths: 12,
+    usageProofYears: 3,
+    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
   }),
 
   createCategorizedCountry("IL", "Israel", "Naher Osten", "direct", {
+    calculationBasis: "registration",
+    protectionPeriod: 10,
     renewalStartMonths: 6,
     renewalDeadlineMonths: 0,
     lateRenewalMonths: 6,
+    usageProofRequired: false,
     usageProofYears: 5,
+    vertreterRequired: "Ja",
+    prufungsumfang: "Umfassend",
+    widerspruch: "Ja",
+    poaVertreterRequired: "Ja",
+    poaDigitalCopy: "Ja",
+    poaOriginalRequired: "Nein",
+    poaDigitalSignature: "Ja",
+    poaNotarization: "Nein",
+    poaApostille: "Nein",
     poaHinweise: "Einfach unterschriebene Vollmacht ist ausreichend, auch als Kopie oder mit digitaler Signatur.",
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
     additionalNotes:
-      "Markenregistrierungen in Israel sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Israel Patent Office (ILPO). Israel ist seit 2010 Mitglied des Madrid-Protokolls. Eine Marke kann nach 5 Jahren Nichtbenutzung angefochten werden. Israel hat ein modernes und effizientes Markensystem mit Online-Einreichungsmöglichkeiten.",
+      "Israel ist seit 2010 Mitglied des Madrid-Protokolls. Israel hat ein modernes und effizientes Markensystem mit Online-Einreichungsmöglichkeiten.",
   }),
 
-  createCategorizedCountry("JO", "Jordanien", "Naher Osten", "direct", {
-    renewalStartMonths: 6,
-    renewalDeadlineMonths: 0,
-    lateRenewalMonths: 12,
-    usageProofYears: 3,
-    poaHinweise:
-      "Notariell beglaubigte und legalisierte Vollmacht erforderlich, zusätzlich konsularische Beglaubigung durch die jordanische Botschaft.",
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
-    additionalNotes:
-      "Markenregistrierungen in Jordanien sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Industrial Property Protection Directorate (IPPD). Jordanien ist seit 2022 Mitglied des Madrid-Protokolls. Alle Dokumente müssen ins Arabische übersetzt werden. Eine Marke kann nach 3 Jahren Nichtbenutzung angefochten werden.",
-  }),
-
-  createCategorizedCountry("LB", "Libanon", "Naher Osten", "direct", {
-    renewalStartMonths: 6,
-    renewalDeadlineMonths: 0,
-    lateRenewalMonths: 6,
-    usageProofYears: 3,
-    poaHinweise:
-      "Notariell beglaubigte und legalisierte Vollmacht erforderlich, mit konsularischer Beglaubigung durch die libanesische Botschaft.",
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Abkommen"],
-    additionalNotes:
-      "Markenregistrierungen im Libanon sind für 15 Jahre gültig und können für weitere 15-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Intellectual Property Office im Ministry of Economy and Trade. Der Libanon ist Mitglied des Madrid-Abkommens. Alle Dokumente müssen ins Arabische übersetzt werden. Eine Marke kann nach 3 Jahren Nichtbenutzung angefochten werden.",
-  }),
-
-  createCategorizedCountry("SY", "Syrien", "Naher Osten", "direct", {
-    renewalStartMonths: 6,
-    renewalDeadlineMonths: 0,
-    lateRenewalMonths: 6,
-    usageProofYears: 3,
-    poaHinweise:
-      "Notariell beglaubigte und legalisierte Vollmacht erforderlich, mit konsularischer Beglaubigung durch die syrische Botschaft.",
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "Madrid-Abkommen"],
-    additionalNotes:
-      "Markenregistrierungen in Syrien sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Registrierung erfolgt beim Directorate of Commercial and Industrial Property Protection. Syrien ist Mitglied des Madrid-Abkommens. Alle Dokumente müssen ins Arabische übersetzt werden. Eine Marke kann nach 3 Jahren Nichtbenutzung angefochten werden. Aufgrund der politischen Situation kann es zu erheblichen Verzögerungen bei der Bearbeitung kommen.",
-  }),
+  // Weitere Länder können hier hinzugefügt werden...
 ]
