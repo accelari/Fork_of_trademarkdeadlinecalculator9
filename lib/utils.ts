@@ -11,13 +11,12 @@ export function cn(...inputs: ClassValue[]) {
  * @returns Emoji flag for the country
  */
 export function getCountryEmoji(countryCode: string): string {
-  if (!countryCode) return "🏳️"
+  if (!countryCode) return ""
 
   // Convert country code to regional indicator symbols
-  // Each letter is represented by a regional indicator symbol (🇦-🇿)
-  // which is 127397 code points after its ASCII value
+  // Each letter is represented by a regional indicator symbol letter which is
+  // 127397 code points after the corresponding ASCII letter
   const codePoints = [...countryCode.toUpperCase()].map((char) => char.charCodeAt(0) + 127397)
 
-  // Convert code points to emoji
   return String.fromCodePoint(...codePoints)
 }

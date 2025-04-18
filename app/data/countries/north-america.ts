@@ -1,4 +1,12 @@
 import { createCategorizedCountry } from "./country-utils"
+import {
+  notarizationAndApostilleDeviations,
+  threeYearUsageProofDeviations,
+  usStyleDeviations,
+  shortLateRenewalDeviations,
+  simplePoaDeviations,
+  combineDeviations,
+} from "./common-deviations"
 
 export const northAmericanCountries = [
   createCategorizedCountry("CA", "Kanada", "Nordamerika", "direct", {
@@ -18,92 +26,51 @@ export const northAmericanCountries = [
     additionalNotes:
       "Besonderheit: Wenn die Marke innerhalb der Nachfrist verlängert wird, fällt in Kanada keine Verspätungsgebühr an. Allerdings muss jeder Anmelder eine kanadische Anschrift für Zustellungen angeben. Seit 2019 fordert CIPO bei Verfahren häufig die Angabe einer in Kanada oder im 'NAFTA-Raum' ansässigen Zustelladresse. Kanada hat 2019 auf ein Klassen-System umgestellt (Nizza-Klassifikation); bei Verlängerung vor 2019 eingetragener Marken muss der Inhaber seine Waren/Dienstleistungen in Klassen einteilen.",
   }),
-  createCategorizedCountry("MX", "Mexiko", "Nordamerika", "direct", {
-    // Nur spezifische Abweichungen oder Besonderheiten angeben
-    calculationBasis: "application", // Überschreibt die Standardkategorisierung
-    usageProofYears: 3,
-    usageDeclarationYears: [3],
-    additionalNotes:
-      "Mexiko verlangt einen Benutzungsnachweis innerhalb von drei Monaten nach dem dritten Jahrestag der Registrierung.",
-  }),
 
-  createCategorizedCountry("US", "Vereinigte Staaten von Amerika", "Nordamerika", "direct", {
-    // Nur spezifische Abweichungen oder Besonderheiten angeben
-    usageProofYears: 6,
-    usageDeclarationYears: [5, 10],
-    additionalNotes:
-      "In den USA ist eine Benutzungserklärung zwischen dem 5. und 6. Jahr nach der Registrierung und bei der Verlängerung erforderlich.",
-    lateFilingMonths: 6,
-    filingPeriodStart: "Jederzeit",
-  }),
-  createCategorizedCountry("BB", "Barbados", "Nordamerika", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre ab Registrierungsdatum
+  createCategorizedCountry(
+    "MX",
+    "Mexiko",
+    "Nordamerika",
+    "direct",
+    combineDeviations(threeYearUsageProofDeviations, {
+      calculationBasis: "application", // Überschreibt die Standardkategorisierung
+      usageDeclarationYears: [3],
+      additionalNotes:
+        "Mexiko verlangt einen Benutzungsnachweis innerhalb von drei Monaten nach dem dritten Jahrestag der Registrierung.",
+    }),
+  ),
 
-    renewalStartMonths: 2, // Verlängerungsantrag kann 2 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Nachfrist für verspätete Verlängerung
+  createCategorizedCountry("US", "Vereinigte Staaten von Amerika", "Nordamerika", "direct", usStyleDeviations),
 
-    usageProofRequired: false, // Kein Nutzungsnachweis erforderlich
-    usageProofYears: 0, // Kein spezifischer Zeitpunkt für Nutzungsnachweis
+  createCategorizedCountry(
+    "BB",
+    "Barbados",
+    "Nordamerika",
+    "direct",
+    combineDeviations(simplePoaDeviations, {
+      calculationBasis: "registration",
+      renewalStartMonths: 2,
+      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
+      additionalNotes:
+        "Markenregistrierung in Barbados gilt für 10 Jahre und kann für weitere 10-Jahres-Perioden verlängert werden. Zwei Monate vor Ablauf der Schutzfrist wird eine Benachrichtigung versandt.",
+    }),
+  ),
 
-    usageDeclarationRequired: false, // Keine Benutzungserklärung erforderlich
-    usageDeclarationYears: [], // Keine regelmäßige Erklärung zur Nutzung notwendig
-
-    vertreterRequired: "Ja", // Lokaler Vertreter ist für ausländische Anmelder erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original-Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Nein", // Keine notarielle Beglaubigung erforderlich
-    poaApostille: "Nein", // Keine Apostille erforderlich
-    poaHinweise: "Einfach unterschriebene Vollmacht ist ausreichend.",
-
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Standardmäßige Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3, // Frist für Prioritätsdokumente
-
-    additionalNotes:
-      "Markenregistrierung in Barbados gilt für 10 Jahre und kann für weitere 10-Jahres-Perioden verlängert werden. Zwei Monate vor Ablauf der Schutzfrist wird eine Benachrichtigung versandt.",
-  }),
-  createCategorizedCountry("BS", "Bahamas", "Nordamerika", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Neues Gesetz: 10 Jahre (früher 14 Jahre)
-
-    renewalStartMonths: 3, // Verlängerungsantrag kann 3 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 1, // Nachfrist von 1 Monat für verspätete Verlängerung
-
-    usageProofRequired: false, // Kein Nutzungsnachweis erforderlich
-    usageProofYears: 0,
-
-    usageDeclarationRequired: false, // Keine Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Nein", // Keine Apostille erforderlich
-    poaHinweise: "Original-Vollmacht erforderlich für Anmeldung oder Erneuerung.",
-
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
-    additionalNotes:
-      "Unter dem neuen Markenrecht der Bahamas wurde die Schutzfrist von 14 Jahren auf 10 Jahre reduziert, mit entsprechenden 10-Jahres-Verlängerungsperioden.",
-  }),
+  createCategorizedCountry(
+    "BS",
+    "Bahamas",
+    "Nordamerika",
+    "direct",
+    combineDeviations(notarizationAndApostilleDeviations, shortLateRenewalDeviations, {
+      calculationBasis: "registration",
+      renewalStartMonths: 3,
+      poaApostille: "Nein", // Überschreibt den Wert aus notarizationAndApostilleDeviations
+      poaHinweise: "Original-Vollmacht erforderlich für Anmeldung oder Erneuerung.",
+      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
+      additionalNotes:
+        "Unter dem neuen Markenrecht der Bahamas wurde die Schutzfrist von 14 Jahren auf 10 Jahre reduziert, mit entsprechenden 10-Jahres-Verlängerungsperioden.",
+    }),
+  ),
   createCategorizedCountry("BZ", "Belize", "Nordamerika", "direct", {
     calculationBasis: "registration",
     protectionPeriod: 10, // Schutzdauer: 10 Jahre
