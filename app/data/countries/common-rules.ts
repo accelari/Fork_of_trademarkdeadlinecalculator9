@@ -1,5 +1,32 @@
 // app/data/countries/common-rules.ts
 
+// Importieren der Ländergruppen
+import {
+  poaDigitalCopyAcceptedCountries,
+  poaOriginalRequiredCountries,
+  poaDigitalSignatureAcceptedCountries,
+  usageDeclarationRequiredCountries,
+  usageDeclarationYears5Countries,
+  usageDeclarationYears3Countries,
+  usageDeclarationYears6Countries,
+  usageDeclarationYears10Countries,
+  oneMonthLateRenewalCountries,
+  twelveMonthLateRenewalCountries,
+  comprehensiveExaminationCountries,
+  limitedExaminationCountries,
+  formalExaminationCountries,
+  madridProtocolCountries,
+  parisConventionCountries,
+  tripsCountries,
+  aripoCountries,
+  oapiCountries,
+  gccCountries,
+  euCountries,
+  aseanCountries,
+  mercosurCountries,
+  andeanPactCountries,
+} from "./rule-groups"
+
 // Grundlegende Regelsätze
 export const defaultDirectRules = {
   vertreterRequired: "Ja",
@@ -375,7 +402,7 @@ export const representativeRequiredCountries = [
 export const representativeNotRequiredCountries = ["DE", "EM", "GB", "IT", "IE", "AU", "NZ", "CA", "ER"]
 
 // Kategorisierung nach Benutzungsnachweis
-export const usageProofRequiredCountries = [
+export const usageProofRequiredCountriesList = [
   "EM",
   "US",
   "MX",
@@ -525,7 +552,7 @@ export const limitedExaminationCountriesList = [
 ]
 
 // Kategorisierung nach Widerspruchsmöglichkeit
-export const oppositionPossibleCountries = [
+export const oppositionPossibleCountriesList = [
   "DE",
   "EM",
   "FR",
@@ -1156,7 +1183,7 @@ export const fiveYearUsageDeclarationCountries = ["US", "PH", "AR"]
 
 // Hilfsfunktion zur Bestimmung der Benutzungsnachweis-Informationen
 export function getUsageProofRequired(countryCode: string): boolean {
-  return isInCategory(countryCode, usageProofRequiredCountries)
+  return isInCategory(countryCode, usageProofRequiredCountriesList)
 }
 
 // Hilfsfunktion zur Bestimmung der Benutzungserklärung-Informationen
@@ -1194,16 +1221,18 @@ export function getRepresentativeRequired(countryCode: string): string {
 }
 
 export function getPrufungsumfang(countryCode: string): string {
-  if (comprehensiveExaminationCountriesList.includes(countryCode)) {
+  if (comprehensiveExaminationCountries.includes(countryCode)) {
     return "Umfassend"
-  } else if (limitedExaminationCountriesList.includes(countryCode)) {
+  } else if (limitedExaminationCountries.includes(countryCode)) {
     return "Beschränkt"
+  } else if (formalExaminationCountries.includes(countryCode)) {
+    return "Formal"
   }
   return "Umfassend" // Default
 }
 
 export function getWiderspruch(countryCode: string): string {
-  if (oppositionPossibleCountries.includes(countryCode)) {
+  if (oppositionPossibleCountriesList.includes(countryCode)) {
     return "Ja"
   } else if (oppositionNotPossibleCountries.includes(countryCode)) {
     return "Nein"
@@ -1211,10 +1240,20 @@ export function getWiderspruch(countryCode: string): string {
   return "Ja" // Default
 }
 
-export function getPoaRequirements(countryCode: string): { notarization: string; apostille: string } {
-  const notarization = poaNotarizationRequiredCountries.includes(countryCode) ? "Ja" : "Nein"
-  const apostille = poaApostilleRequiredCountries.includes(countryCode) ? "Ja" : "Nein"
-  return { notarization, apostille }
+export function getPoaRequirements(countryCode: string): {
+  digitalCopy: string
+  originalRequired: string
+  digitalSignature: string
+  notarization: string
+  apostille: string
+} {
+  return {
+    digitalCopy: poaDigitalCopyAcceptedCountries.includes(countryCode) ? "Ja" : "Nein",
+    originalRequired: poaOriginalRequiredCountries.includes(countryCode) ? "Ja" : "Nein",
+    digitalSignature: poaDigitalSignatureAcceptedCountries.includes(countryCode) ? "Ja" : "Nein",
+    notarization: poaNotarizationRequiredCountries.includes(countryCode) ? "Ja" : "Nein",
+    apostille: poaApostilleRequiredCountries.includes(countryCode) ? "Ja" : "Nein",
+  }
 }
 
 export function getRenewalPeriods(countryCode: string): {
@@ -1222,9 +1261,25 @@ export function getRenewalPeriods(countryCode: string): {
   renewalDeadlineMonths: number
   lateRenewalMonths: number
 } {
-  const renewalStartMonths = sixMonthRenewalStartCountries.includes(countryCode) ? 6 : 12
-  const renewalDeadlineMonths = 0
-  const lateRenewalMonths = sixMonthLateRenewalCountries.includes(countryCode) ? 6 : 3
+  let renewalStartMonths = 6 // Default
+  if (twelveMonthRenewalStartCountries.includes(countryCode)) {
+    renewalStartMonths = 12
+  } else if (sixMonthRenewalStartCountries.includes(countryCode)) {
+    renewalStartMonths = 6
+  }
+
+  const renewalDeadlineMonths = 0 // Immer 0 (bis zum Ablauftag)
+
+  let lateRenewalMonths = 6 // Default
+  if (threeMonthLateRenewalCountries.includes(countryCode)) {
+    lateRenewalMonths = 3
+  } else if (oneMonthLateRenewalCountries.includes(countryCode)) {
+    lateRenewalMonths = 1
+  } else if (twelveMonthLateRenewalCountries.includes(countryCode)) {
+    lateRenewalMonths = 12
+  } else if (sixMonthLateRenewalCountries.includes(countryCode)) {
+    lateRenewalMonths = 6
+  }
 
   return { renewalStartMonths, renewalDeadlineMonths, lateRenewalMonths }
 }
@@ -1234,7 +1289,7 @@ export function getUsageProofDetails(countryCode: string): {
   type: string
   deadlineYears: number | null
 } {
-  const required = usageProofRequiredCountries.includes(countryCode)
+  const required = usageProofRequiredCountriesList.includes(countryCode)
   const type = "Nachweis nur auf Antrag Dritter erforderlich"
   let deadlineYears: number | null = null
 
@@ -1250,17 +1305,74 @@ export function getUsageProofDetails(countryCode: string): {
 export function getUsageDeclarationDetails(countryCode: string): {
   required: boolean
   type: string
-  deadlineYears: number | null
+  deadlineYears: number[] | null
 } {
-  const required = usageDeclarationRequiredCountriesList.includes(countryCode)
-  const type = "Keine regelmäßige Benutzungserklärung erforderlich"
-  let deadlineYears: number | null = null
+  const required = usageDeclarationRequiredCountries.includes(countryCode)
+  const type = required
+    ? "Eidesstattliche Nutzungserklärung erforderlich"
+    : "Keine regelmäßige Benutzungserklärung erforderlich"
+  let deadlineYears: number[] | null = null
 
-  if (threeYearUsageDeclarationCountries.includes(countryCode)) {
-    deadlineYears = 3
-  } else if (fiveYearUsageDeclarationCountries.includes(countryCode)) {
-    deadlineYears = 5
+  if (usageDeclarationYears3Countries.includes(countryCode)) {
+    deadlineYears = [3]
+  } else if (usageDeclarationYears5Countries.includes(countryCode)) {
+    deadlineYears = [5]
+  } else if (usageDeclarationYears6Countries.includes(countryCode)) {
+    deadlineYears = [6]
+  } else if (usageDeclarationYears10Countries.includes(countryCode)) {
+    deadlineYears = [10]
+  }
+
+  // Spezialfall USA mit mehreren Fristen
+  if (countryCode === "US") {
+    deadlineYears = [5, 10, 20, 30, 40, 50]
   }
 
   return { required, type, deadlineYears }
+}
+
+export function getMitgliedschaften(countryCode: string): string[] {
+  const mitgliedschaften: string[] = []
+
+  if (parisConventionCountries.includes(countryCode)) {
+    mitgliedschaften.push("Pariser Verbandsübereinkunft")
+  }
+
+  if (tripsCountries.includes(countryCode)) {
+    mitgliedschaften.push("TRIPS")
+  }
+
+  if (madridProtocolCountries.includes(countryCode)) {
+    mitgliedschaften.push("Madrid-Protokoll")
+  }
+
+  if (aripoCountries.includes(countryCode)) {
+    mitgliedschaften.push("ARIPO")
+  }
+
+  if (oapiCountries.includes(countryCode)) {
+    mitgliedschaften.push("OAPI")
+  }
+
+  if (gccCountries.includes(countryCode)) {
+    mitgliedschaften.push("GCC")
+  }
+
+  if (euCountries.includes(countryCode)) {
+    mitgliedschaften.push("EU")
+  }
+
+  if (aseanCountries.includes(countryCode)) {
+    mitgliedschaften.push("ASEAN")
+  }
+
+  if (mercosurCountries.includes(countryCode)) {
+    mitgliedschaften.push("Mercosur")
+  }
+
+  if (andeanPactCountries.includes(countryCode)) {
+    mitgliedschaften.push("Andenpakt")
+  }
+
+  return mitgliedschaften
 }

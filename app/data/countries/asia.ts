@@ -1,104 +1,28 @@
 import { createCategorizedCountry } from "./country-utils"
-import { simplePoaDeviations, notarizationAndApostilleDeviations, combineDeviations } from "./common-deviations"
 
 // Hilfsfunktion für ASEAN-Länder
 function createASEANCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
-  return createCategorizedCountry(
-    code,
-    name,
-    "Asien",
-    "direct",
-    combineDeviations({
-      calculationBasis: "registration",
-      protectionPeriod: 10,
-      renewalStartMonths: 6,
-      renewalDeadlineMonths: 0,
-      lateRenewalMonths: 6,
-      usageProofRequired: false,
-      usageProofYears: 3,
-      vertreterRequired: "Ja",
-      prufungsumfang: "Umfassend",
-      widerspruch: "Ja",
-      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-      additionalNotes: additionalNotes || "Mitglied der ASEAN (Verband Südostasiatischer Nationen).",
-      ...extraDeviations,
-    }),
-  )
+  return createCategorizedCountry(code, name, "Asien", "direct", {
+    additionalNotes: additionalNotes || "Mitglied der ASEAN (Verband Südostasiatischer Nationen).",
+    ...extraDeviations,
+  })
 }
 
 // Hilfsfunktion für ostasiatische Länder mit strengen Prüfungsverfahren
 function createEastAsianCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
-  return createCategorizedCountry(
-    code,
-    name,
-    "Asien",
-    "direct",
-    combineDeviations(simplePoaDeviations, {
-      calculationBasis: "registration",
-      protectionPeriod: 10,
-      renewalStartMonths: 6,
-      renewalDeadlineMonths: 0,
-      lateRenewalMonths: 6,
-      usageProofRequired: false,
-      usageProofYears: 3,
-      vertreterRequired: "Ja",
-      prufungsumfang: "Umfassend",
-      widerspruch: "Ja",
-      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
-      additionalNotes: additionalNotes || "Strenges Prüfungsverfahren für Markenanmeldungen.",
-      ...extraDeviations,
-    }),
-  )
+  return createCategorizedCountry(code, name, "Asien", "direct", {
+    additionalNotes: additionalNotes || "Strenges Prüfungsverfahren für Markenanmeldungen.",
+    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
+    ...extraDeviations,
+  })
 }
 
 // Hilfsfunktion für zentralasiatische Länder
 function createCentralAsianCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
-  return createCategorizedCountry(
-    code,
-    name,
-    "Asien",
-    "direct",
-    combineDeviations(notarizationAndApostilleDeviations, {
-      calculationBasis: "registration",
-      protectionPeriod: 10,
-      renewalStartMonths: 6,
-      renewalDeadlineMonths: 0,
-      lateRenewalMonths: 6,
-      usageProofRequired: true,
-      usageProofYears: 3,
-      vertreterRequired: "Ja",
-      prufungsumfang: "Umfassend",
-      widerspruch: "Ja",
-      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-      additionalNotes: additionalNotes || "Zentralasiatisches Land mit strengen Vollmachtsanforderungen.",
-      ...extraDeviations,
-    }),
-  )
-}
-
-// Hilfsfunktion für Länder im Nahen Osten
-function createMiddleEasternCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
-  return createCategorizedCountry(
-    code,
-    name,
-    "Asien",
-    "direct",
-    combineDeviations(notarizationAndApostilleDeviations, {
-      calculationBasis: "registration",
-      protectionPeriod: 10,
-      renewalStartMonths: 6,
-      renewalDeadlineMonths: 0,
-      lateRenewalMonths: 6,
-      usageProofRequired: true,
-      usageProofYears: 5,
-      vertreterRequired: "Ja",
-      prufungsumfang: "Umfassend",
-      widerspruch: "Ja",
-      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-      additionalNotes: additionalNotes || "Land im Nahen Osten mit strengen Vollmachtsanforderungen.",
-      ...extraDeviations,
-    }),
-  )
+  return createCategorizedCountry(code, name, "Asien", "direct", {
+    additionalNotes: additionalNotes || "Zentralasiatisches Land mit strengen Vollmachtsanforderungen.",
+    ...extraDeviations,
+  })
 }
 
 export const asianCountries = [
@@ -236,63 +160,10 @@ export const asianCountries = [
   // Südasiatische Länder
   createCategorizedCountry("IN", "Indien", "Asien", "direct", {
     calculationBasis: "application",
-    protectionPeriod: 10,
-    renewalStartMonths: 6,
-    renewalDeadlineMonths: 0,
-    lateRenewalMonths: 6,
-    usageProofRequired: false,
     usageProofYears: 5,
-    vertreterRequired: "Ja",
-    prufungsumfang: "Umfassend",
-    widerspruch: "Ja",
-    poaVertreterRequired: "Ja",
-    poaDigitalCopy: "Ja",
-    poaOriginalRequired: "Nein",
-    poaDigitalSignature: "Ja",
-    poaNotarization: "Nein",
-    poaApostille: "Nein",
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
     additionalNotes:
       "Indien ist seit 2013 Mitglied des Madrid-Protokolls. Das indische Markenrecht basiert auf dem britischen System.",
-  }),
-
-  // Naher Osten
-  createMiddleEasternCountry("IQ", "Irak", "Alle Dokumente müssen ins Arabische übersetzt werden.", {
-    lateRenewalMonths: 3,
-  }),
-
-  createMiddleEasternCountry("IR", "Iran", "Alle Dokumente müssen ins Persische übersetzt werden.", {
-    usageProofYears: 3,
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "Madrid-Abkommen", "Madrid-Protokoll"],
-  }),
-
-  createMiddleEasternCountry("JO", "Jordanien", "Alle Dokumente müssen ins Arabische übersetzt werden.", {
-    lateRenewalMonths: 12,
-    usageProofYears: 3,
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
-  }),
-
-  createCategorizedCountry("IL", "Israel", "Asien", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10,
-    renewalStartMonths: 6,
-    renewalDeadlineMonths: 0,
-    lateRenewalMonths: 6,
-    usageProofRequired: false,
-    usageProofYears: 5,
-    vertreterRequired: "Ja",
-    prufungsumfang: "Umfassend",
-    widerspruch: "Ja",
-    poaVertreterRequired: "Ja",
-    poaDigitalCopy: "Ja",
-    poaOriginalRequired: "Nein",
-    poaDigitalSignature: "Ja",
-    poaNotarization: "Nein",
-    poaApostille: "Nein",
-    poaHinweise: "Einfach unterschriebene Vollmacht ist ausreichend, auch als Kopie oder mit digitaler Signatur.",
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
-    additionalNotes:
-      "Israel ist seit 2010 Mitglied des Madrid-Protokolls. Israel hat ein modernes und effizientes Markensystem mit Online-Einreichungsmöglichkeiten.",
   }),
 
   // Weitere Länder können hier hinzugefügt werden...

@@ -1,54 +1,21 @@
 import { createCategorizedCountry } from "./country-utils"
-import { notarizationAndApostilleDeviations, combineDeviations } from "./common-deviations"
 
 // Hilfsfunktion für GCC-Länder (Gulf Cooperation Council)
 function createGCCCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
-  return createCategorizedCountry(
-    code,
-    name,
-    "Naher Osten",
-    "direct",
-    combineDeviations(notarizationAndApostilleDeviations, {
-      calculationBasis: "application",
-      protectionPeriod: 10,
-      renewalStartMonths: 12,
-      renewalDeadlineMonths: 0,
-      lateRenewalMonths: 6,
-      usageProofRequired: false,
-      usageProofYears: 5,
-      vertreterRequired: "Ja",
-      prufungsumfang: "Umfassend",
-      widerspruch: "Ja",
-      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-      additionalNotes: additionalNotes || "Mitglied des Golf-Kooperationsrats (GCC).",
-      ...extraDeviations,
-    }),
-  )
+  return createCategorizedCountry(code, name, "Naher Osten", "direct", {
+    calculationBasis: "application",
+    renewalStartMonths: 12,
+    additionalNotes: additionalNotes || "Mitglied des Golf-Kooperationsrats (GCC).",
+    ...extraDeviations,
+  })
 }
 
 // Hilfsfunktion für Länder im Nahen Osten mit strengen Vollmachtsanforderungen
 function createMiddleEasternCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
-  return createCategorizedCountry(
-    code,
-    name,
-    "Naher Osten",
-    "direct",
-    combineDeviations(notarizationAndApostilleDeviations, {
-      calculationBasis: "registration",
-      protectionPeriod: 10,
-      renewalStartMonths: 6,
-      renewalDeadlineMonths: 0,
-      lateRenewalMonths: 6,
-      usageProofRequired: true,
-      usageProofYears: 5,
-      vertreterRequired: "Ja",
-      prufungsumfang: "Umfassend",
-      widerspruch: "Ja",
-      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-      additionalNotes: additionalNotes || "Land im Nahen Osten mit strengen Vollmachtsanforderungen.",
-      ...extraDeviations,
-    }),
-  )
+  return createCategorizedCountry(code, name, "Naher Osten", "direct", {
+    additionalNotes: additionalNotes || "Land im Nahen Osten mit strengen Vollmachtsanforderungen.",
+    ...extraDeviations,
+  })
 }
 
 export const middleEastCountries = [
@@ -117,26 +84,9 @@ export const middleEastCountries = [
   }),
 
   createCategorizedCountry("IL", "Israel", "Naher Osten", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10,
-    renewalStartMonths: 6,
-    renewalDeadlineMonths: 0,
-    lateRenewalMonths: 6,
-    usageProofRequired: false,
-    usageProofYears: 5,
-    vertreterRequired: "Ja",
-    prufungsumfang: "Umfassend",
-    widerspruch: "Ja",
-    poaVertreterRequired: "Ja",
-    poaDigitalCopy: "Ja",
-    poaOriginalRequired: "Nein",
-    poaDigitalSignature: "Ja",
-    poaNotarization: "Nein",
-    poaApostille: "Nein",
-    poaHinweise: "Einfach unterschriebene Vollmacht ist ausreichend, auch als Kopie oder mit digitaler Signatur.",
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
     additionalNotes:
       "Israel ist seit 2010 Mitglied des Madrid-Protokolls. Israel hat ein modernes und effizientes Markensystem mit Online-Einreichungsmöglichkeiten.",
+    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
   }),
 
   // Weitere Länder können hier hinzugefügt werden...

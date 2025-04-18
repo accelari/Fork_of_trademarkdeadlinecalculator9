@@ -1,83 +1,36 @@
 import { createCategorizedCountry } from "./country-utils"
-import {
-  notarizationAndApostilleDeviations,
-  threeYearUsageProofDeviations,
-  usStyleDeviations,
-  shortLateRenewalDeviations,
-  simplePoaDeviations,
-  combineDeviations,
-} from "./common-deviations"
 
 // Hilfsfunktion für nordamerikanische Länder mit US-ähnlichen Regeln
 function createUSStyleCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
-  return createCategorizedCountry(
-    code,
-    name,
-    "Nordamerika",
-    "direct",
-    combineDeviations(usStyleDeviations, extraDeviations, {
-      additionalNotes: additionalNotes || "Folgt dem US-amerikanischen Markensystem.",
-    }),
-  )
+  return createCategorizedCountry(code, name, "Nordamerika", "direct", {
+    usageProofRequired: true,
+    usageDeclarationRequired: true,
+    usageDeclarationYears: [5, 10],
+    additionalNotes: additionalNotes || "Folgt dem US-amerikanischen Markensystem.",
+    ...extraDeviations,
+  })
 }
 
 // Hilfsfunktion für karibische Länder mit britischem Common Law System
 function createCaribbeanCommonLawCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
-  return createCategorizedCountry(
-    code,
-    name,
-    "Nordamerika",
-    "direct",
-    combineDeviations(simplePoaDeviations, {
-      calculationBasis: "registration",
-      protectionPeriod: 10,
-      renewalStartMonths: 6,
-      renewalDeadlineMonths: 0,
-      lateRenewalMonths: 6,
-      usageProofRequired: false,
-      vertreterRequired: "Ja",
-      prufungsumfang: "Umfassend",
-      widerspruch: "Ja",
-      mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-      additionalNotes: additionalNotes || "Basiert auf dem britischen Common Law System.",
-      ...extraDeviations,
-    }),
-  )
+  return createCategorizedCountry(code, name, "Nordamerika", "direct", {
+    additionalNotes: additionalNotes || "Basiert auf dem britischen Common Law System.",
+    ...extraDeviations,
+  })
 }
 
 // Hilfsfunktion für französische Überseegebiete
 function createFrenchOverseasCountry(code: string, name: string, additionalNotes?: string, extraDeviations = {}) {
-  return createCategorizedCountry(
-    code,
-    name,
-    "Nordamerika",
-    "direct",
-    combineDeviations({
-      calculationBasis: "registration",
-      protectionPeriod: 10,
-      renewalStartMonths: 6,
-      renewalDeadlineMonths: 0,
-      lateRenewalMonths: 6,
-      usageProofRequired: false,
-      usageProofYears: 5,
-      prufungsumfang: "Formal",
-      widerspruch: "Ja",
-      poaDigitalCopy: "Ja",
-      poaOriginalRequired: "Nein",
-      poaDigitalSignature: "Ja",
-      poaNotarization: "Nein",
-      poaApostille: "Nein",
-      mitgliedschaften: ["WIPO", "Pariser Übereinkunft (über Frankreich)", "TRIPS"],
-      additionalNotes:
-        additionalNotes || "Französisches Überseegebiet, abgedeckt durch französische Markenregistrierung.",
-      ...extraDeviations,
-    }),
-  )
+  return createCategorizedCountry(code, name, "Nordamerika", "direct", {
+    prufungsumfang: "Formal",
+    additionalNotes:
+      additionalNotes || "Französisches Überseegebiet, abgedeckt durch französische Markenregistrierung.",
+    ...extraDeviations,
+  })
 }
 
 export const northAmericanCountries = [
   createCategorizedCountry("CA", "Kanada", "Nordamerika", "direct", {
-    // Nur spezifische Abweichungen oder Besonderheiten angeben
     usageProofYears: 3,
     poaHinweise:
       "Eine separate Vollmacht muss dem CIPO nicht vorgelegt werden (die Benennung des Anwalts/Agents im Antragsformular genügt)",
@@ -91,27 +44,26 @@ export const northAmericanCountries = [
     usageProofType: "Eidesstattliche Erklärung über Benutzung (bei Antrag)",
     filingPeriodStart: "Nach Antrag eines Dritten (3 Monate Frist)",
     additionalNotes:
-      "Besonderheit: Wenn die Marke innerhalb der Nachfrist verlängert wird, fällt in Kanada keine Verspätungsgebühr an. Allerdings muss jeder Anmelder eine kanadische Anschrift für Zustellungen angeben. Seit 2019 fordert CIPO bei Verfahren häufig die Angabe einer in Kanada oder im 'NAFTA-Raum' ansässigen Zustelladresse. Kanada hat 2019 auf ein Klassen-System umgestellt (Nizza-Klassifikation); bei Verlängerung vor 2019 eingetragener Marken muss der Inhaber seine Waren/Dienstleistungen in Klassen einteilen.",
+      "Besonderheit: Wenn die Marke innerhalb der Nachfrist verlängert wird, fällt in Kanada keine Verspätungsgebühr an. Allerdings muss jeder Anmelder eine kanadische Anschrift für Zustellungen angeben.",
   }),
 
   createUSStyleCountry(
     "US",
     "Vereinigte Staaten von Amerika",
     "Die USA verlangen eine eidesstattliche Erklärung über die Benutzung der Marke im 5. und 10. Jahr nach der Registrierung sowie bei jeder Verlängerung.",
+    {
+      usageDeclarationYears: [5, 10, 20, 30, 40, 50],
+    },
   ),
 
-  createCategorizedCountry(
-    "MX",
-    "Mexiko",
-    "Nordamerika",
-    "direct",
-    combineDeviations(threeYearUsageProofDeviations, {
-      calculationBasis: "application", // Überschreibt die Standardkategorisierung
-      usageDeclarationYears: [3],
-      additionalNotes:
-        "Mexiko verlangt einen Benutzungsnachweis innerhalb von drei Monaten nach dem dritten Jahrestag der Registrierung.",
-    }),
-  ),
+  createCategorizedCountry("MX", "Mexiko", "Nordamerika", "direct", {
+    calculationBasis: "application",
+    usageProofYears: 3,
+    usageDeclarationRequired: true,
+    usageDeclarationYears: [3],
+    additionalNotes:
+      "Mexiko verlangt einen Benutzungsnachweis innerhalb von drei Monaten nach dem dritten Jahrestag der Registrierung.",
+  }),
 
   // Karibische Länder mit britischem Common Law System
   createCaribbeanCommonLawCountry(
@@ -125,11 +77,12 @@ export const northAmericanCountries = [
     "BS",
     "Bahamas",
     "Unter dem neuen Markenrecht der Bahamas wurde die Schutzfrist von 14 Jahren auf 10 Jahre reduziert, mit entsprechenden 10-Jahres-Verlängerungsperioden.",
-    combineDeviations(notarizationAndApostilleDeviations, shortLateRenewalDeviations, {
+    {
       renewalStartMonths: 3,
-      poaApostille: "Nein", // Überschreibt den Wert aus notarizationAndApostilleDeviations
+      lateRenewalMonths: 1,
+      poaNotarization: "Ja",
       poaHinweise: "Original-Vollmacht erforderlich für Anmeldung oder Erneuerung.",
-    }),
+    },
   ),
 
   // Weitere karibische Länder
@@ -163,64 +116,21 @@ export const northAmericanCountries = [
 
   // Weitere Länder mit individuellen Regeln
   createCategorizedCountry("CR", "Costa Rica", "Nordamerika", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10,
     renewalStartMonths: 12,
-    renewalDeadlineMonths: 0,
-    lateRenewalMonths: 6,
-    usageProofRequired: false,
-    usageProofYears: 0,
-    usageDeclarationRequired: false,
-    usageDeclarationYears: [],
-    vertreterRequired: "Ja",
-    prufungsumfang: "Umfassend",
-    widerspruch: "Ja",
-    poaVertreterRequired: "Ja",
-    poaDigitalCopy: "Nein",
-    poaOriginalRequired: "Ja",
-    poaDigitalSignature: "Nein",
-    poaNotarization: "Ja",
-    poaApostille: "Ja",
     poaHinweise: "Beglaubigte Vollmacht erforderlich, mit Apostille oder Legalisierung durch das Konsulat.",
     mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS", "Madrid-Protokoll"],
-    priorityDeadlineMonths: 6,
-    priorityDocumentDeadlineMonths: 3,
     additionalNotes:
       "Markenregistrierungen in Costa Rica haben eine Schutzfrist von 10 Jahren und können unbegrenzt für weitere 10-Jahres-Perioden verlängert werden.",
   }),
+
   createCategorizedCountry("CU", "Kuba", "Nordamerika", "direct", {
-    calculationBasis: "registration",
-    protectionPeriod: 10, // Schutzdauer: 10 Jahre
-
-    renewalStartMonths: 6, // Verlängerungsantrag kann 6 Monate vor Ablauf gestellt werden
-    renewalDeadlineMonths: 0, // Die Verlängerung muss bis zum Ablauf erfolgen
-    lateRenewalMonths: 6, // Standardmäßige Nachfrist von 6 Monaten
-
-    usageProofRequired: true, // Nutzungsnachweis erforderlich
-    usageProofYears: 3, // Nach 3 Jahren Nichtbenutzung kann die Marke angefochten werden
-
-    usageDeclarationRequired: false, // Keine spezifische Benutzungserklärung erforderlich
-    usageDeclarationYears: [],
-
-    vertreterRequired: "Ja", // Lokaler Vertreter erforderlich
-    prufungsumfang: "Umfassend", // Formelle und materielle Prüfung
-    widerspruch: "Ja", // Widerspruch möglich
-
-    poaVertreterRequired: "Ja", // Vertretervollmacht erforderlich
-    poaDigitalCopy: "Nein", // Digitale Kopie nicht ausreichend
-    poaOriginalRequired: "Ja", // Original der Vollmacht erforderlich
-    poaDigitalSignature: "Nein", // Digitale Signatur nicht akzeptiert
-    poaNotarization: "Ja", // Notarielle Beglaubigung erforderlich
-    poaApostille: "Ja", // Apostille erforderlich
+    usageProofRequired: true,
+    usageProofYears: 3,
+    poaNotarization: "Ja",
+    poaApostille: "Ja",
     poaHinweise: "Beglaubigte und legalisierte Vollmacht erforderlich.",
-
-    mitgliedschaften: ["WIPO", "Pariser Übereinkunft", "TRIPS"],
-
-    priorityDeadlineMonths: 6, // Prioritätsfrist von 6 Monaten
-    priorityDocumentDeadlineMonths: 3,
-
     additionalNotes:
-      "Markenregistrierungen in Kuba sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Marke kann nach 3 Jahren Nichtbenutzung angefochten werden. Die Anmeldung muss über das kubanische Amt für gewerblichen Rechtsschutz (OCPI) erfolgen.",
+      "Markenregistrierungen in Kuba sind für 10 Jahre gültig und können für weitere 10-Jahres-Perioden verlängert werden. Die Marke kann nach 3 Jahren Nichtbenutzung angefochten werden.",
   }),
   createCategorizedCountry("DM", "Dominica", "Nordamerika", "direct", {
     calculationBasis: "registration",
