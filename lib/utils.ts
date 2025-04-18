@@ -11,7 +11,9 @@ export function cn(...inputs: ClassValue[]) {
  * @returns Emoji flag for the country
  */
 export function getCountryEmoji(countryCode: string): string {
-  if (!countryCode) return ""
+  if (!countryCode || countryCode.length !== 2) {
+    return "🏳️"
+  }
 
   // Convert country code to regional indicator symbols
   // Each letter is represented by a regional indicator symbol letter which is
