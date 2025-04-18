@@ -18,83 +18,44 @@ function groupCountriesByProperty(property: keyof (typeof countriesData)[0]) {
   return groups
 }
 
-// Berechnungsbasis-Gruppen
-export const calculationBasisGroups = groupCountriesByProperty("calculationBasis")
+// Generiere alle Gruppen dynamisch
+const propertyKeys = [
+  "calculationBasis",
+  "protectionPeriod",
+  "renewalPeriod",
+  "renewalStartMonths",
+  "renewalDeadlineMonths",
+  "lateRenewalMonths",
+  "usageProofRequired",
+  "usageProofYears",
+  "usageDeclarationRequired",
+  "usageDeclarationYears",
+  "vertreterRequired",
+  "prufungsumfang",
+  "widerspruch",
+  "poaVertreterRequired",
+  "poaDigitalCopy",
+  "poaOriginalRequired",
+  "poaDigitalSignature",
+  "poaNotarization",
+  "poaApostille",
+  "poaHinweise",
+  "priorityDeadlineMonths",
+  "priorityDocumentDeadlineMonths",
+  "usageProofDeadlineYears",
+  "usageDeclarationDeadlineYears",
+  "lateFilingMonths",
+  "filingPeriodStart",
+] as const
 
-// Schutzdauer-Gruppen
-export const protectionPeriodGroups = groupCountriesByProperty("protectionPeriod")
-
-// Verlängerungszeitraum-Gruppen
-export const renewalPeriodGroups = groupCountriesByProperty("renewalPeriod")
-
-// Verlängerungsfrist-Gruppen
-export const renewalStartMonthsGroups = groupCountriesByProperty("renewalStartMonths")
-
-// Verlängerungsdeadline-Gruppen
-export const renewalDeadlineMonthsGroups = groupCountriesByProperty("renewalDeadlineMonths")
-
-// Nachfrist-Gruppen
-export const lateRenewalMonthsGroups = groupCountriesByProperty("lateRenewalMonths")
-
-// Benutzungsnachweis-Gruppen
-export const usageProofRequiredGroups = groupCountriesByProperty("usageProofRequired")
-
-// Benutzungsnachweisfrist-Gruppen
-export const usageProofYearsGroups = groupCountriesByProperty("usageProofYears")
-
-// Benutzungserklärung-Gruppen
-export const usageDeclarationRequiredGroups = groupCountriesByProperty("usageDeclarationRequired")
-
-// Benutzungserklärungsjahre-Gruppen
-export const usageDeclarationYearsGroups = groupCountriesByProperty("usageDeclarationYears")
-
-// Vertretererfordernis-Gruppen
-export const vertreterRequiredGroups = groupCountriesByProperty("vertreterRequired")
-
-// Prüfungsumfang-Gruppen
-export const prufungsumfangGroups = groupCountriesByProperty("prufungsumfang")
-
-// Widerspruch-Gruppen
-export const widerspruchGroups = groupCountriesByProperty("widerspruch")
-
-// Vollmacht Vertreter-Gruppen
-export const poaVertreterRequiredGroups = groupCountriesByProperty("poaVertreterRequired")
-
-// Vollmacht Digitalkopie-Gruppen
-export const poaDigitalCopyGroups = groupCountriesByProperty("poaDigitalCopy")
-
-// Vollmacht Original-Gruppen
-export const poaOriginalRequiredGroups = groupCountriesByProperty("poaOriginalRequired")
-
-// Vollmacht Digitale Signatur-Gruppen
-export const poaDigitalSignatureGroups = groupCountriesByProperty("poaDigitalSignature")
-
-// Vollmacht Notarisierung-Gruppen
-export const poaNotarizationGroups = groupCountriesByProperty("poaNotarization")
-
-// Vollmacht Apostille-Gruppen
-export const poaApostilleGroups = groupCountriesByProperty("poaApostille")
-
-// Vollmacht Hinweise-Gruppen
-export const poaHinweiseGroups = groupCountriesByProperty("poaHinweise")
-
-// Prioritätsfrist-Gruppen
-export const priorityDeadlineMonthsGroups = groupCountriesByProperty("priorityDeadlineMonths")
-
-// Prioritätsdokumentenfrist-Gruppen
-export const priorityDocumentDeadlineMonthsGroups = groupCountriesByProperty("priorityDocumentDeadlineMonths")
-
-// Benutzungsnachweisfrist-Gruppen
-export const usageProofDeadlineYearsGroups = groupCountriesByProperty("usageProofDeadlineYears")
-
-// Benutzungserklärungsfrist-Gruppen
-export const usageDeclarationDeadlineYearsGroups = groupCountriesByProperty("usageDeclarationDeadlineYears")
-
-// Nacheinreichungsfrist-Gruppen
-export const lateFilingMonthsGroups = groupCountriesByProperty("lateFilingMonths")
-
-// Einreichungszeitraum-Start-Gruppen
-export const filingPeriodStartGroups = groupCountriesByProperty("filingPeriodStart")
+// Generiere alle Gruppen dynamisch
+const generatedGroups = propertyKeys.reduce(
+  (acc, key) => {
+    acc[key] = groupCountriesByProperty(key)
+    return acc
+  },
+  {} as Record<string, Record<string, string[]>>,
+)
 
 // Mitgliedschaften-Gruppen
 export function getMembershipGroups() {
@@ -118,32 +79,7 @@ export const membershipGroups = getMembershipGroups()
 
 // Alle Gruppen in einem Objekt zusammenfassen
 export const allCountryGroups = {
-  calculationBasis: calculationBasisGroups,
-  protectionPeriod: protectionPeriodGroups,
-  renewalPeriod: renewalPeriodGroups,
-  renewalStartMonths: renewalStartMonthsGroups,
-  renewalDeadlineMonths: renewalDeadlineMonthsGroups,
-  lateRenewalMonths: lateRenewalMonthsGroups,
-  usageProofRequired: usageProofRequiredGroups,
-  usageProofYears: usageProofYearsGroups,
-  usageDeclarationRequired: usageDeclarationRequiredGroups,
-  usageDeclarationYears: usageDeclarationYearsGroups,
-  vertreterRequired: vertreterRequiredGroups,
-  prufungsumfang: prufungsumfangGroups,
-  widerspruch: widerspruchGroups,
-  poaVertreterRequired: poaVertreterRequiredGroups,
-  poaDigitalCopy: poaDigitalCopyGroups,
-  poaOriginalRequired: poaOriginalRequiredGroups,
-  poaDigitalSignature: poaDigitalSignatureGroups,
-  poaNotarization: poaNotarizationGroups,
-  poaApostille: poaApostilleGroups,
-  poaHinweise: poaHinweiseGroups,
-  priorityDeadlineMonths: priorityDeadlineMonthsGroups,
-  priorityDocumentDeadlineMonths: priorityDocumentDeadlineMonthsGroups,
-  usageProofDeadlineYears: usageProofDeadlineYearsGroups,
-  usageDeclarationDeadlineYears: usageDeclarationDeadlineYearsGroups,
-  lateFilingMonths: lateFilingMonthsGroups,
-  filingPeriodStart: filingPeriodStartGroups,
+  ...generatedGroups,
   membership: membershipGroups,
 }
 
@@ -187,26 +123,17 @@ export function getCountriesMatchingCriteria(
 // Funktion zum Abrufen der Anzahl der Länder in jeder Gruppe für eine bestimmte Eigenschaft
 export function getCountsForProperty(property: keyof typeof allCountryGroups): Record<string, number> {
   const groups = allCountryGroups[property]
-  const counts: Record<string, number> = {}
-
-  Object.entries(groups).forEach(([value, countries]) => {
-    counts[value] = countries.length
-  })
-
-  return counts
+  return Object.fromEntries(Object.entries(groups).map(([value, countries]) => [value, countries.length]))
 }
 
 // Funktion zum Abrufen der Prozentsätze der Länder in jeder Gruppe für eine bestimmte Eigenschaft
 export function getPercentagesForProperty(property: keyof typeof allCountryGroups): Record<string, number> {
   const groups = allCountryGroups[property]
-  const percentages: Record<string, number> = {}
   const totalCountries = countriesData.length
 
-  Object.entries(groups).forEach(([value, countries]) => {
-    percentages[value] = (countries.length / totalCountries) * 100
-  })
-
-  return percentages
+  return Object.fromEntries(
+    Object.entries(groups).map(([value, countries]) => [value, (countries.length / totalCountries) * 100]),
+  )
 }
 
 // Funktion zum Abrufen der häufigsten Werte für eine bestimmte Eigenschaft
@@ -278,27 +205,6 @@ export function getCountriesInOneGroupButNotAnother(
   const countriesInExcludeGroup = getCountriesWithIdenticalValue(excludeGroup.property, excludeGroup.value)
 
   return countriesInIncludeGroup.filter((code) => !countriesInExcludeGroup.includes(code))
-}
-
-// Funktion zum Abrufen von Ländern, die in einer bestimmten Region liegen und bestimmte Eigenschaften haben
-export function getCountriesInRegionWithProperties(
-  region: string,
-  properties: Partial<Record<keyof typeof allCountryGroups, string>>,
-): string[] {
-  // Starte mit allen Ländern in der Region
-  const countriesInRegion = getCountriesWithIdenticalValue("region", region)
-
-  // Filtere nach den Ländern, die auch die angegebenen Eigenschaften haben
-  return countriesInRegion.filter((code) => {
-    const country = countriesData.find((c) => c.code === code)
-    if (!country) return false
-
-    // Prüfe, ob das Land alle angegebenen Eigenschaften hat
-    return Object.entries(properties).every(([property, value]) => {
-      const propertyKey = property as keyof typeof country
-      return String(country[propertyKey]) === value
-    })
-  })
 }
 
 // Funktion zum Abrufen von Ländern, die ähnliche Eigenschaften wie ein Referenzland haben
@@ -373,6 +279,8 @@ export function getCountriesWithExtremeValues(
 
 // Funktion zum Abrufen von Ländern, die bestimmte Mitgliedschaften haben
 export function getCountriesWithMemberships(memberships: string[]): string[] {
+  if (memberships.length === 0) return []
+
   return countriesData
     .filter((country) => {
       if (!country.mitgliedschaften) return false
@@ -385,6 +293,8 @@ export function getCountriesWithMemberships(memberships: string[]): string[] {
 
 // Funktion zum Abrufen von Ländern, die mindestens eine von mehreren Mitgliedschaften haben
 export function getCountriesWithAnyMembership(memberships: string[]): string[] {
+  if (memberships.length === 0) return []
+
   return countriesData
     .filter((country) => {
       if (!country.mitgliedschaften) return false

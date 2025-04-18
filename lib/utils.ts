@@ -5,20 +5,40 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-/**
- * Returns the emoji flag for a given country code
- * @param countryCode ISO 3166-1 alpha-2 country code
- * @returns Emoji flag for the country
- */
 export function getCountryEmoji(countryCode: string): string {
-  if (!countryCode || countryCode.length !== 2) {
-    return "🏳️"
+  // Handle special cases first
+  const specialCases: Record<string, string> = {
+    EU: "🇪🇺",
+    WIPO: "🌐",
+    EUIPO: "🇪🇺",
+    OAPI: "🌍",
+    ARIPO: "🌍",
+    GCC: "🌙",
+    EAPO: "🌐",
+    AP: "🌍",
+    OA: "🌍",
+    EA: "🌐",
+    EM: "🇪🇺",
+    EP: "🇪🇺",
+    WO: "🌐",
+    XN: "🌐",
+    XU: "🌐",
   }
 
-  // Convert country code to regional indicator symbols
-  // Each letter is represented by a regional indicator symbol letter which is
-  // 127397 code points after the corresponding ASCII letter
-  const codePoints = [...countryCode.toUpperCase()].map((char) => char.charCodeAt(0) + 127397)
+  // Extract base country code (remove any suffixes like "_1")
+  const baseCode = countryCode.split("_")[0].toUpperCase()
 
-  return String.fromCodePoint(...codePoints)
+  // Return special case if it exists
+  if (specialCases[baseCode]) {
+    return specialCases[baseCode]
+  }
+
+  // For standard country codes, convert to regional indicator symbols
+  if (baseCode.length === 2) {
+    const codePoints = [...baseCode].map((char) => 127397 + char.charCodeAt(0))
+    return String.fromCodePoint(...codePoints)
+  }
+
+  // Fallback for unknown codes
+  return "🏳️"
 }
